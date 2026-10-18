@@ -14,51 +14,51 @@
   "questions": [
     {
       "id": "Q01", "prompt": "Tính 27 + 18.", "operands": [27, 18], "answer": 45, "equivalentGroup": "two-digit-carry-a",
-      "hints": { "reminder": "Hãy tìm tổng của 27 và 18.", "nextStep": "Cộng hàng đơn vị trước; nếu được từ 10 trở lên, đổi 10 đơn vị thành 1 chục rồi cộng hàng chục.", "workedExample": "Ví dụ 34 + 28: 4 + 8 = 12, viết 2 nhớ 1; 3 + 2 + 1 = 6, được 62." }
+      "hints": { "reminder": "Hàng đơn vị cộng lại có vượt quá 9 không?", "nextStep": "Cộng hàng đơn vị trước; nếu được từ 10 trở lên, đổi 10 đơn vị thành 1 chục rồi cộng hàng chục.", "workedExample": "Ví dụ 34 + 28: 4 + 8 = 12, viết 2 nhớ 1; 3 + 2 + 1 = 6, được 62." }
     },
     {
       "id": "Q02", "prompt": "Tính 36 + 29.", "operands": [36, 29], "answer": 65, "equivalentGroup": "two-digit-carry-a",
-      "hints": { "reminder": "Hãy tìm tổng của 36 và 29.", "nextStep": "Cộng hàng đơn vị trước; nếu được từ 10 trở lên, đổi 10 đơn vị thành 1 chục rồi cộng hàng chục.", "workedExample": "Ví dụ 45 + 17: 5 + 7 = 12, viết 2 nhớ 1; 4 + 1 + 1 = 6, được 62." }
+      "hints": { "reminder": "Hàng đơn vị cộng lại có vượt quá 9 không?", "nextStep": "Cộng hàng đơn vị trước; nếu được từ 10 trở lên, đổi 10 đơn vị thành 1 chục rồi cộng hàng chục.", "workedExample": "Ví dụ 45 + 17: 5 + 7 = 12, viết 2 nhớ 1; 4 + 1 + 1 = 6, được 62." }
     },
     {
       "id": "Q03", "prompt": "Tính 45 + 27.", "operands": [45, 27], "answer": 72, "equivalentGroup": "two-digit-carry-b",
-      "hints": { "reminder": "Hãy tìm tổng của 45 và 27.", "nextStep": "Cộng hàng đơn vị trước; nếu được từ 10 trở lên, đổi 10 đơn vị thành 1 chục rồi cộng hàng chục.", "workedExample": "Ví dụ 26 + 38: 6 + 8 = 14, viết 4 nhớ 1; 2 + 3 + 1 = 6, được 64." }
+      "hints": { "reminder": "Hàng đơn vị cộng lại có vượt quá 9 không?", "nextStep": "Cộng hàng đơn vị trước; nếu được từ 10 trở lên, đổi 10 đơn vị thành 1 chục rồi cộng hàng chục.", "workedExample": "Ví dụ 26 + 38: 6 + 8 = 14, viết 4 nhớ 1; 2 + 3 + 1 = 6, được 64." }
     },
     {
       "id": "Q04", "prompt": "Tính 18 + 56.", "operands": [18, 56], "answer": 74, "equivalentGroup": "two-digit-carry-b",
-      "hints": { "reminder": "Hãy tìm tổng của 18 và 56.", "nextStep": "Cộng hàng đơn vị trước; nếu được từ 10 trở lên, đổi 10 đơn vị thành 1 chục rồi cộng hàng chục.", "workedExample": "Ví dụ 37 + 28: 7 + 8 = 15, viết 5 nhớ 1; 3 + 2 + 1 = 6, được 65." }
+      "hints": { "reminder": "Hàng đơn vị cộng lại có vượt quá 9 không?", "nextStep": "Cộng hàng đơn vị trước; nếu được từ 10 trở lên, đổi 10 đơn vị thành 1 chục rồi cộng hàng chục.", "workedExample": "Ví dụ 37 + 28: 7 + 8 = 15, viết 5 nhớ 1; 3 + 2 + 1 = 6, được 65." }
     },
     {
       "id": "Q05", "prompt": "Tính 39 + 24.", "operands": [39, 24], "answer": 63, "equivalentGroup": "two-digit-carry-c",
-      "hints": { "reminder": "Hãy tìm tổng của 39 và 24.", "nextStep": "Cộng hàng đơn vị trước; nếu được từ 10 trở lên, đổi 10 đơn vị thành 1 chục rồi cộng hàng chục.", "workedExample": "Ví dụ 48 + 16: 8 + 6 = 14, viết 4 nhớ 1; 4 + 1 + 1 = 6, được 64." }
+      "hints": { "reminder": "Hàng đơn vị cộng lại có vượt quá 9 không?", "nextStep": "Cộng hàng đơn vị trước; nếu được từ 10 trở lên, đổi 10 đơn vị thành 1 chục rồi cộng hàng chục.", "workedExample": "Ví dụ 48 + 16: 8 + 6 = 14, viết 4 nhớ 1; 4 + 1 + 1 = 6, được 64." }
     },
     {
       "id": "Q06", "prompt": "Tính 28 + 47.", "operands": [28, 47], "answer": 75, "equivalentGroup": "two-digit-carry-c",
-      "hints": { "reminder": "Hãy tìm tổng của 28 và 47.", "nextStep": "Cộng hàng đơn vị trước; nếu được từ 10 trở lên, đổi 10 đơn vị thành 1 chục rồi cộng hàng chục.", "workedExample": "Ví dụ 29 + 35: 9 + 5 = 14, viết 4 nhớ 1; 2 + 3 + 1 = 6, được 64." }
+      "hints": { "reminder": "Hàng đơn vị cộng lại có vượt quá 9 không?", "nextStep": "Cộng hàng đơn vị trước; nếu được từ 10 trở lên, đổi 10 đơn vị thành 1 chục rồi cộng hàng chục.", "workedExample": "Ví dụ 29 + 35: 9 + 5 = 14, viết 4 nhớ 1; 2 + 3 + 1 = 6, được 64." }
     },
     {
       "id": "Q07", "prompt": "Tính 46 + 37.", "operands": [46, 37], "answer": 83, "equivalentGroup": "two-digit-carry-d",
-      "hints": { "reminder": "Hãy tìm tổng của 46 và 37.", "nextStep": "Cộng hàng đơn vị trước; nếu được từ 10 trở lên, đổi 10 đơn vị thành 1 chục rồi cộng hàng chục.", "workedExample": "Ví dụ 57 + 26: 7 + 6 = 13, viết 3 nhớ 1; 5 + 2 + 1 = 8, được 83." }
+      "hints": { "reminder": "Hàng đơn vị cộng lại có vượt quá 9 không?", "nextStep": "Cộng hàng đơn vị trước; nếu được từ 10 trở lên, đổi 10 đơn vị thành 1 chục rồi cộng hàng chục.", "workedExample": "Ví dụ 52 + 28: 2 + 8 = 10, viết 0 nhớ 1; 5 + 2 + 1 = 8, được 80." }
     },
     {
       "id": "Q08", "prompt": "Tính 58 + 25.", "operands": [58, 25], "answer": 83, "equivalentGroup": "two-digit-carry-d",
-      "hints": { "reminder": "Hãy tìm tổng của 58 và 25.", "nextStep": "Cộng hàng đơn vị trước; nếu được từ 10 trở lên, đổi 10 đơn vị thành 1 chục rồi cộng hàng chục.", "workedExample": "Ví dụ 38 + 45: 8 + 5 = 13, viết 3 nhớ 1; 3 + 4 + 1 = 8, được 83." }
+      "hints": { "reminder": "Hàng đơn vị cộng lại có vượt quá 9 không?", "nextStep": "Cộng hàng đơn vị trước; nếu được từ 10 trở lên, đổi 10 đơn vị thành 1 chục rồi cộng hàng chục.", "workedExample": "Ví dụ 42 + 29: 2 + 9 = 11, viết 1 nhớ 1; 4 + 2 + 1 = 7, được 71." }
     },
     {
       "id": "Q09", "prompt": "Tính 67 + 18.", "operands": [67, 18], "answer": 85, "equivalentGroup": "two-digit-carry-e",
-      "hints": { "reminder": "Hãy tìm tổng của 67 và 18.", "nextStep": "Cộng hàng đơn vị trước; nếu được từ 10 trở lên, đổi 10 đơn vị thành 1 chục rồi cộng hàng chục.", "workedExample": "Ví dụ 49 + 36: 9 + 6 = 15, viết 5 nhớ 1; 4 + 3 + 1 = 8, được 85." }
+      "hints": { "reminder": "Hàng đơn vị cộng lại có vượt quá 9 không?", "nextStep": "Cộng hàng đơn vị trước; nếu được từ 10 trở lên, đổi 10 đơn vị thành 1 chục rồi cộng hàng chục.", "workedExample": "Ví dụ 47 + 29: 7 + 9 = 16, viết 6 nhớ 1; 4 + 2 + 1 = 7, được 76." }
     },
     {
       "id": "Q10", "prompt": "Tính 29 + 58.", "operands": [29, 58], "answer": 87, "equivalentGroup": "two-digit-carry-e",
-      "hints": { "reminder": "Hãy tìm tổng của 29 và 58.", "nextStep": "Cộng hàng đơn vị trước; nếu được từ 10 trở lên, đổi 10 đơn vị thành 1 chục rồi cộng hàng chục.", "workedExample": "Ví dụ 58 + 29: 8 + 9 = 17, viết 7 nhớ 1; 5 + 2 + 1 = 8, được 87." }
+      "hints": { "reminder": "Hàng đơn vị cộng lại có vượt quá 9 không?", "nextStep": "Cộng hàng đơn vị trước; nếu được từ 10 trở lên, đổi 10 đơn vị thành 1 chục rồi cộng hàng chục.", "workedExample": "Ví dụ 46 + 27: 6 + 7 = 13, viết 3 nhớ 1; 4 + 2 + 1 = 7, được 73." }
     },
     {
       "id": "Q11", "prompt": "Tính 74 + 19.", "operands": [74, 19], "answer": 93, "equivalentGroup": "two-digit-carry-f",
-      "hints": { "reminder": "Hãy tìm tổng của 74 và 19.", "nextStep": "Cộng hàng đơn vị trước; nếu được từ 10 trở lên, đổi 10 đơn vị thành 1 chục rồi cộng hàng chục.", "workedExample": "Ví dụ 65 + 28: 5 + 8 = 13, viết 3 nhớ 1; 6 + 2 + 1 = 9, được 93." }
+      "hints": { "reminder": "Hàng đơn vị cộng lại có vượt quá 9 không?", "nextStep": "Cộng hàng đơn vị trước; nếu được từ 10 trở lên, đổi 10 đơn vị thành 1 chục rồi cộng hàng chục.", "workedExample": "Ví dụ 42 + 38: 2 + 8 = 10, viết 0 nhớ 1; 4 + 3 + 1 = 8, được 80." }
     },
     {
-      "id": "Q12", "prompt": "Tính 83 + 17.", "operands": [83, 17], "answer": 100, "equivalentGroup": "two-digit-carry-f",
-      "hints": { "reminder": "Hãy tìm tổng của 83 và 17.", "nextStep": "Cộng hàng đơn vị trước; nếu được từ 10 trở lên, đổi 10 đơn vị thành 1 chục rồi cộng hàng chục.", "workedExample": "Ví dụ 47 + 48: 7 + 8 = 15, viết 5 nhớ 1; 4 + 4 + 1 = 9, được 95." }
+      "id": "Q12", "prompt": "Tính 83 + 17.", "operands": [83, 17], "answer": 100, "equivalentGroup": "two-digit-carry-g",
+      "hints": { "reminder": "Hàng đơn vị cộng lại có vượt quá 9 không?", "nextStep": "Cộng hàng đơn vị trước; nếu được từ 10 trở lên, đổi 10 đơn vị thành 1 chục rồi cộng hàng chục.", "workedExample": "Ví dụ 47 + 48: 7 + 8 = 15, viết 5 nhớ 1; 4 + 4 + 1 = 9, được 95." }
     }
   ],
   "approvalStatus": "nháp"

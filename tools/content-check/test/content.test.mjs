@@ -23,6 +23,7 @@ test('accepts a carrying sum of exactly 100', () => {
   const boundary = structuredClone(lesson);
   boundary.questions[0].operands = [83, 17];
   boundary.questions[0].answer = 100;
+  boundary.questions[0].equivalentGroup = 'boundary-case';
   assert.deepEqual(validateLesson(boundary), []);
 });
 
@@ -46,15 +47,26 @@ test('reports equivalent questions with different operand digit counts', () => {
   assert.ok(validateLesson(invalid).some((error) => error.includes('equivalent') && error.includes('difficulty')));
 });
 
-test('reports equivalent questions with different difficulty', () => {
+test('reports different difficulty for otherwise valid Q11 and Q12 when grouped as equivalent', () => {
   const invalid = structuredClone(lesson);
-  invalid.questions[0].operands = [41, 25];
-  invalid.questions[0].answer = 66;
-  assert.ok(validateLesson(invalid).some((error) => error.includes('equivalent') && error.includes('difficulty')));
+  invalid.questions[11].equivalentGroup = invalid.questions[10].equivalentGroup;
+  assert.ok(validateLesson(invalid).some((error) => error.includes('Q12') && error.includes('equivalent') && error.includes('difficulty')));
 });
 
 test('reports missing hint levels', () => {
   const invalid = structuredClone(lesson);
   delete invalid.questions[0].hints.workedExample;
   assert.ok(validateLesson(invalid).some((error) => error.includes('Q01') && error.includes('hints')));
+});
+
+test('reports a worked example whose total reveals the question answer', () => {
+  const invalid = structuredClone(lesson);
+  invalid.questions[6].hints.workedExample = 'Ví dụ 57 + 26: 7 + 6 = 13, được 83.';
+  assert.ok(validateLesson(invalid).some((error) => error.includes('Q07') && error.includes('workedExample') && error.includes('answer')));
+});
+
+test('reports a worked example that repeats the question operands in reverse order', () => {
+  const invalid = structuredClone(lesson);
+  invalid.questions[9].hints.workedExample = 'Ví dụ 58 + 29: 8 + 9 = 17, được 87.';
+  assert.ok(validateLesson(invalid).some((error) => error.includes('Q10') && error.includes('workedExample') && error.includes('operand pair')));
 });

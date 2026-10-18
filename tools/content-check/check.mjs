@@ -58,12 +58,14 @@ export function validateLesson(lesson) {
     if (operandsAreIntegers) {
       const [left, right] = question.operands;
       const sum = left + right;
-      const hasCarry = (left % 10) + (right % 10) >= 10;
+      const unitsCarry = Math.floor(((left % 10) + (right % 10)) / 10);
+      const tensCarry = Math.floor((Math.floor(left / 10) + Math.floor(right / 10) + unitsCarry) / 10);
+      const carryCount = unitsCarry + tensCarry;
       if (answerValid && question.answer !== sum) errors.push(`${id}: answer does not equal the sum of operands`);
-      if (!hasCarry) errors.push(`${id}: addition must require carrying in the units column`);
+      if (carryCount === 0) errors.push(`${id}: addition must require carrying`);
       if (sum > 100) errors.push(`${id}: sum must be at most 100`);
       if (nonEmptyString(question.equivalentGroup)) {
-        const difficulty = JSON.stringify([question.operands.map(digitCount), hasCarry]);
+        const difficulty = JSON.stringify([question.operands.map(digitCount), carryCount, digitCount(sum)]);
         const previous = groupDifficulty.get(question.equivalentGroup);
         if (previous && previous.difficulty !== difficulty) {
           errors.push(`${id}: equivalent group ${question.equivalentGroup} has different difficulty`);
@@ -78,6 +80,22 @@ export function validateLesson(lesson) {
     if (!isRecord(hints)
       || !['reminder', 'nextStep', 'workedExample'].every((key) => nonEmptyString(hints[key]))) {
       errors.push(`${id}: hints must include non-empty reminder, nextStep, and workedExample levels`);
+    }
+    if (isRecord(hints) && nonEmptyString(hints.workedExample) && operandsAreIntegers) {
+      const exampleMatch = hints.workedExample.match(/(\d+)\s*\+\s*(\d+)/);
+      if (!exampleMatch) {
+        errors.push(`${id}: workedExample must include a sample addition`);
+      } else {
+        const exampleLeft = Number(exampleMatch[1]);
+        const exampleRight = Number(exampleMatch[2]);
+        const [left, right] = question.operands;
+        const repeatsQuestionPair = (exampleLeft === left && exampleRight === right)
+          || (exampleLeft === right && exampleRight === left);
+        if (repeatsQuestionPair) errors.push(`${id}: workedExample must use a different operand pair`);
+        if (exampleLeft + exampleRight === question.answer) {
+          errors.push(`${id}: workedExample must not reveal the question answer`);
+        }
+      }
     }
   }
   return errors;
