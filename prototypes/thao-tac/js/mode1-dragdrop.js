@@ -357,7 +357,21 @@ class Mode1DragDrop {
   }
 
   handleDrop(item, targetZone) {
-    // Kiểm tra hợp lệ:
+    // 1. Kiểm tra nếu thả nhầm cột (khối đơn vị vào cột chục, hoặc que chục vào cột đơn vị)
+    // Theo quy định: trả vật phẩm về chỗ cũ, ghi nhận THA_NHAM_COT và không báo "sai" làm gián đoạn trẻ.
+    if ((item.type === 'unit' && targetZone === 'board-tens') || (item.type === 'ten' && targetZone === 'board-units')) {
+      this.logger.log('keo-tha', 'THA_NHAM_COT', {
+        itemId: item.id,
+        itemType: item.type,
+        attemptedZone: targetZone,
+        returnedTo: item.location,
+        note: 'Trẻ kéo nhầm cột; đã trả về vị trí cũ để tự làm lại'
+      });
+      this.render();
+      return;
+    }
+
+    // 2. Kiểm tra thả hợp lệ:
     // Que chục vào board-tens hoặc về kho source
     // Khối đơn vị vào board-units hoặc về kho source
     let valid = false;
@@ -368,14 +382,6 @@ class Mode1DragDrop {
       valid = true;
     } else if (item.type === 'unit' && (targetZone === 'board-units' || targetZone === item.source)) {
       finalLocation = targetZone;
-      valid = true;
-    } else if (targetZone === 'board-tens' && item.type === 'unit') {
-      // Nếu thả nhầm khối đơn vị vào cột chục, tự động đưa sang cột đơn vị
-      finalLocation = 'board-units';
-      valid = true;
-    } else if (targetZone === 'board-units' && item.type === 'ten') {
-      // Nếu thả nhầm que chục vào cột đơn vị, tự động đưa sang cột chục
-      finalLocation = 'board-tens';
       valid = true;
     }
 
@@ -392,7 +398,9 @@ class Mode1DragDrop {
     } else {
       this.logger.log('keo-tha', 'THA_KHONG_HOP_LE', {
         itemId: item.id,
-        attemptedZone: targetZone
+        itemType: item.type,
+        attemptedZone: targetZone,
+        returnedTo: item.location
       });
       this.render();
     }
@@ -465,9 +473,11 @@ class Mode1DragDrop {
       }
     }
 
-    this.logger.log('keo-tha', 'CHUYEN_NHANH_VAO_BANG', {
+    this.logger.log('keo-tha', 'CHUYEN_NHANH_CO_TRO_GIUP', {
       source: sourceName,
-      movedItemsCount: movedCount
+      movedItemsCount: movedCount,
+      hasAssistance: true,
+      note: 'Dùng nút trợ giúp chuyển nhanh cả số vào bảng (phân biệt với tự kéo)'
     });
 
     this.render();

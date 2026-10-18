@@ -92,15 +92,15 @@ class Mode2Column {
 
             </div>
 
-            <!-- Gợi ý bước tính chuẩn GDPT -->
+            <!-- Gợi ý các bước tính gợi mở, không lộ đáp án -->
             <div class="math-steps-guide">
               <div class="step-guide-item ${this.state.activeField === 'units' ? 'guide-active' : ''}">
                 <span class="step-badge">Bước 1</span>
-                <span>Hàng đơn vị: <strong>7 + 5 = 12</strong>, viết <strong>2</strong> nhớ <strong>1</strong></span>
+                <span>Cộng hàng đơn vị trước. Được bao nhiêu? Có phải nhớ không?</span>
               </div>
               <div class="step-guide-item ${this.state.activeField === 'tens' || this.state.activeField === 'remember' ? 'guide-active' : ''}">
                 <span class="step-badge">Bước 2</span>
-                <span>Hàng chục: <strong>2 + 1 = 3</strong>, thêm 1 nhớ bằng <strong>4</strong>, viết <strong>4</strong></span>
+                <span>Cộng hàng chục, nhớ thêm số đã nhớ (nếu có) nhé.</span>
               </div>
             </div>
           </div>
@@ -235,7 +235,7 @@ class Mode2Column {
     else if (u === '2' && t === '4') {
       this.state.isCorrect = true;
       this.state.feedbackType = 'success';
-      this.state.feedbackMessage = '👏 <strong>Kết quả 42 rất đúng!</strong> Con hãy điền thêm số <strong>1</strong> vào ô nhớ ở trên để cô giáo chấm điểm tối đa nhé!';
+      this.state.feedbackMessage = '👏 <strong>Kết quả 42 rất đúng!</strong> Con hãy điền thêm số <strong>1</strong> vào ô nhớ ở trên để ghi nhớ bước làm nhé!';
       this.logger.log('dat-tinh', 'KIEM_TRA_DUNG_THIEU_NHO', { units: u, tens: t, remember: r });
     }
     // Trường hợp 3: Lỗi điển hình quên nhớ (ra kết quả 32)

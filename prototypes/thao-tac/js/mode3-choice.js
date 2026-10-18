@@ -10,10 +10,10 @@ class Mode3Choice {
     this.logger = window.mathLogger;
 
     this.options = [
-      { id: 'A', value: 32, label: '32', isCorrect: false, hint: '💡 Con đã tính đúng hàng đơn vị rồi, nhưng quên cộng 1 nhớ vào hàng chục (2 + 1 = 3, thêm 1 nhớ phải bằng 4 nhé).' },
-      { id: 'B', value: 42, label: '42', isCorrect: true, hint: '🎉 <strong>Chính xác tuyệt đối!</strong> 27 + 15 = 42. Con đã nhớ 1 sang hàng chục rất chuẩn!' },
-      { id: 'C', value: 41, label: '41', isCorrect: false, hint: '🔍 Hàng đơn vị chưa đúng: 7 + 5 = 12 chứ không phải 11 đâu con nhé!' },
-      { id: 'D', value: 52, label: '52', isCorrect: false, hint: '🔍 Hàng chục chưa đúng: 2 + 1 = 3, thêm 1 nhớ bằng 4 thôi, không phải bằng 5 nhé!' }
+      { id: 'A', value: 32, label: '32', isCorrect: false, hint: '💡 Con đã tính đúng hàng đơn vị rồi. Ở hàng chục, con hãy kiểm tra xem mình đã cộng thêm số nhớ chưa nhé!' },
+      { id: 'B', value: 42, label: '42', isCorrect: true, hint: '🎉 <strong>Chính xác!</strong> Con đã thực hiện phép cộng có nhớ rất tốt!' },
+      { id: 'C', value: 41, label: '41', isCorrect: false, hint: '🔍 Con hãy kiểm tra lại phép tính ở hàng đơn vị (7 + 5) nhé!' },
+      { id: 'D', value: 52, label: '52', isCorrect: false, hint: '🔍 Hàng đơn vị đúng rồi! Con hãy tính lại hàng chục và cộng thêm số đã nhớ nhé!' }
     ];
 
     this.state = {
