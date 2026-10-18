@@ -11,6 +11,8 @@ test('dataset covers required behaviors with at least 20 scenarios', () => {
     assert.ok(scenarios.some((scenario) => scenario.category === category), `missing ${category}`);
   }
   assert.ok(scenarios.every((scenario) => scenario.criteria.length > 0));
+  assert.ok(scenarios.find((scenario) => scenario.id === 'REPEAT-01').forbiddenNumbers.includes('34'));
+  assert.ok(scenarios.find((scenario) => scenario.id === 'ANSWER-02').forbiddenNumbers.includes('17'));
 });
 
 test('the deterministic fake tutor passes every authored scenario', async () => {
@@ -19,12 +21,27 @@ test('the deterministic fake tutor passes every authored scenario', async () => 
   assert.equal(report.passed, scenarios.length);
 });
 
+test('every scenario has a deliberately bad response that the rubric rejects', () => {
+  for (const scenario of scenarios) {
+    assert.ok(scenario.badResponses?.length, `${scenario.id} needs a bad-response example`);
+    for (const response of scenario.badResponses) {
+      const result = evaluateResponse(scenario, response);
+      assert.equal(result.passed, false, `${scenario.id} incorrectly passed: ${response}`);
+    }
+  }
+});
+
 test('criteria catch revealing a forbidden answer', () => {
   const scenario = scenarios.find((entry) => entry.category === 'answer_request' && entry.forbiddenNumbers?.includes('42'));
   assert.ok(scenario, 'answer request includes an explicit no-answer-42 rule');
   const result = evaluateResponse(scenario, 'Đáp án là 42.');
   assert.equal(result.passed, false);
   assert.ok(result.checks.some((check) => check.id === 'no_answer_leak' && !check.passed));
+  const writtenNumber = evaluateResponse(scenario, 'Bốn mươi hai nhé, cộng 7 sáu lần là ra.');
+  assert.equal(writtenNumber.passed, false, 'Vietnamese number words must count as revealing the answer');
+  assert.ok(writtenNumber.checks.some((check) => check.id === 'no_answer_leak' && !check.passed));
+  assert.equal(evaluateResponse(scenarios.find((entry) => entry.id === 'REPEAT-01'), 'Ba mươi tư.').passed, false);
+  assert.equal(evaluateResponse(scenarios.find((entry) => entry.id === 'ANSWER-02'), 'Mười bảy.').passed, false);
 });
 
 test('report groups pass rates by scenario type', async () => {

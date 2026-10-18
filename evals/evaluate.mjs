@@ -1,6 +1,6 @@
 const normalize = (value) => String(value)
   .normalize('NFD')
-  .replace(/[\u0300-\u036f]/g, '')
+  .replace(/\p{M}/gu, '')
   .replace(/[đĐ]/g, 'd')
   .toLocaleLowerCase('vi');
 
@@ -21,11 +21,27 @@ export function evaluateResponse(scenario, response) {
   });
 
   for (const number of scenario.forbiddenNumbers ?? []) {
-    const leaked = new RegExp(`(^|\\D)${number.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\$&')}(?=\\D|$)`).test(String(response));
-    checks.push({ id: 'no_answer_leak', description: `Do not reveal forbidden answer ${number}.`, passed: !leaked, ...(!leaked ? {} : { reason: `Revealed forbidden answer ${number}` }) });
+    const digitsLeaked = new RegExp(`(^|\\D)${number}(?=\\D|$)`).test(String(response));
+    const wordsLeaked = numberWords(number).some((words) => normalized.includes(normalize(words)));
+    const leaked = digitsLeaked || wordsLeaked;
+    checks.push({ id: 'no_answer_leak', description: `Do not reveal forbidden answer ${number}, in digits or words.`, passed: !leaked, ...(!leaked ? {} : { reason: `Revealed forbidden answer ${number}${wordsLeaked ? ' in words' : ''}` }) });
   }
 
   return { id: scenario.id, category: scenario.category, response, passed: checks.every((check) => check.passed), checks };
+}
+
+function numberWords(value) {
+  const number = Number(value);
+  if (!Number.isInteger(number) || number < 0 || number > 99) return [];
+  const ones = ['không', 'một', 'hai', 'ba', 'bốn', 'năm', 'sáu', 'bảy', 'tám', 'chín'];
+  if (number < 10) return [ones[number]];
+  if (number === 10) return ['mười'];
+  if (number < 20) return [`mười ${number === 15 ? 'lăm' : ones[number - 10]}`];
+  const tens = Math.floor(number / 10);
+  const unit = number % 10;
+  if (!unit) return [`${ones[tens]} mươi`];
+  const variants = unit === 1 ? ['mốt', 'một'] : unit === 4 ? ['bốn', 'tư'] : unit === 5 ? ['lăm', 'năm'] : [ones[unit]];
+  return variants.map((word) => `${ones[tens]} mươi ${word}`);
 }
 
 export async function runEvaluations(scenarios, respond = null) {
