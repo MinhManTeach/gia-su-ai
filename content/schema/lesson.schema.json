@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Gia su AI lesson sample",
+  "description": "Draft content contract based on section 10 of dac-ta-ban-giao.md; not an approved production API.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["lessonId", "objectiveId", "version", "referenceSources", "prerequisites", "questions", "approvalStatus"],
+  "properties": {
+    "lessonId": { "type": "string", "minLength": 1 },
+    "objectiveId": { "type": "string", "minLength": 1 },
+    "version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" },
+    "referenceSources": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["items", "note"],
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["title", "locator"],
+            "properties": {
+              "title": { "type": "string", "minLength": 1 },
+              "locator": { "type": "string", "minLength": 1 },
+              "url": { "type": "string", "format": "uri" }
+            }
+          }
+        },
+        "note": { "const": "chưa duyệt" }
+      }
+    },
+    "prerequisites": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+    "questions": {
+      "type": "array",
+      "minItems": 10,
+      "maxItems": 15,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "prompt", "operands", "answer", "equivalentGroup", "hints"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^Q[0-9]{2}$" },
+          "prompt": { "type": "string", "minLength": 1 },
+          "operands": {
+            "type": "array",
+            "minItems": 2,
+            "maxItems": 2,
+            "items": { "type": "integer", "minimum": 10, "maximum": 99 }
+          },
+          "answer": { "type": "integer", "minimum": 10, "maximum": 100 },
+          "equivalentGroup": { "type": "string", "minLength": 1 },
+          "hints": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["reminder", "nextStep", "workedExample"],
+            "properties": {
+              "reminder": { "type": "string", "minLength": 1 },
+              "nextStep": { "type": "string", "minLength": 1 },
+              "workedExample": { "type": "string", "minLength": 1 }
+            }
+          }
+        }
+      }
+    },
+    "approvalStatus": { "const": "nháp" }
+  }
+}
