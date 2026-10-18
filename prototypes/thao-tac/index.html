@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0, user-scalable=yes">
+  <title>Bản Thử 3 Kiểu Thao Tác Bài Toán — Gia Sư AI (T-02)</title>
+  <meta name="description" content="Bản thử nghiệm 3 kiểu thao tác phép cộng có nhớ dành cho học sinh tiểu học: Kéo thả que chục và khối đơn vị, Đặt tính theo cột có ô nhớ, và Trắc nghiệm 4 đáp án.">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Header ứng dụng -->
+  <header class="app-header">
+    <div class="app-branding">
+      <span class="app-logo">📐</span>
+      <div class="app-title-group">
+        <h1>Gia Sư AI — Không Gian Thao Tác Toán Học</h1>
+        <p>Phép cộng có nhớ trong phạm vi 100 (Toán lớp 2 — GDPT 2018)</p>
+      </div>
+    </div>
+    <div class="target-badge">
+      Bản thử nghiệm T-02 · Mô-đun voice-workspace
+    </div>
+  </header>
+
+  <!-- 3 Thẻ Tabs Chuyển Kiểu Thao Tác -->
+  <nav class="tab-navigation" role="tablist" aria-label="Các kiểu thao tác bài toán">
+    <button type="button" class="nav-tab-btn tab-active" data-target="mode1" role="tab" aria-selected="true" id="tab-btn-1">
+      <span>🟡 Cách 1: Que tính & Khối đơn vị</span>
+    </button>
+    <button type="button" class="nav-tab-btn" data-target="mode2" role="tab" aria-selected="false" id="tab-btn-2">
+      <span>📝 Cách 2: Đặt tính có ô "nhớ"</span>
+    </button>
+    <button type="button" class="nav-tab-btn" data-target="mode3" role="tab" aria-selected="false" id="tab-btn-3">
+      <span>🎯 Cách 3: Chọn 1 trong 4 đáp án</span>
+    </button>
+  </nav>
+
+  <!-- Vùng nội dung 3 Chế độ -->
+  <main class="main-content">
+    <!-- Tab 1: Kéo thả que chục và khối đơn vị -->
+    <section class="tab-panel panel-active" id="tab-content-mode1" role="tabpanel" aria-labelledby="tab-btn-1">
+      <!-- Mode 1 JS sẽ tự render tại đây -->
+    </section>
+
+    <!-- Tab 2: Đặt tính theo cột có ô nhớ -->
+    <section class="tab-panel" id="tab-content-mode2" role="tabpanel" aria-labelledby="tab-btn-2">
+      <!-- Mode 2 JS sẽ tự render tại đây -->
+    </section>
+
+    <!-- Tab 3: Chọn 1 trong 4 đáp án -->
+    <section class="tab-panel" id="tab-content-mode3" role="tabpanel" aria-labelledby="tab-btn-3">
+      <!-- Mode 3 JS sẽ tự render tại đây -->
+    </section>
+  </main>
+
+  <!-- Khung Debug Ghi Nhận Sự Kiện Theo Thời Gian Thực -->
+  <aside class="debug-section" aria-label="Bảng theo dõi sự kiện tương tác">
+    <div class="debug-header">
+      <div class="debug-title-wrap">
+        <h4>⚡ Khung Theo Dõi Sự Kiện (Debug Event Log)</h4>
+        <span class="counter-badge" id="debug-counter">0 sự kiện</span>
+      </div>
+      <div class="debug-actions">
+        <button type="button" class="btn-debug" id="btn-export-json" title="Tải xuống tệp JSON danh sách sự kiện">
+          💾 Xuất JSON
+        </button>
+        <button type="button" class="btn-debug" id="btn-clear-log" title="Xóa lịch sử sự kiện">
+          🗑️ Xóa log
+        </button>
+        <button type="button" class="btn-debug" id="btn-toggle-debug" title="Thu gọn hoặc mở rộng">
+          🔽 Thu gọn log
+        </button>
+      </div>
+    </div>
+    
+    <div class="debug-body-wrapper" id="debug-body-wrapper">
+      <div class="debug-table-container">
+        <table class="debug-table">
+          <thead>
+            <tr>
+              <th>Thời điểm</th>
+              <th>Chế độ</th>
+              <th>Loại thao tác</th>
+              <th>Chi tiết dữ liệu</th>
+            </tr>
+          </thead>
+          <tbody id="debug-log-tbody">
+            <!-- Dữ liệu sự kiện được cập nhật tự động bằng JS -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Scripts -->
+  <script src="js/logger.js"></script>
+  <script src="js/mode1-dragdrop.js"></script>
+  <script src="js/mode2-column.js"></script>
+  <script src="js/mode3-choice.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
