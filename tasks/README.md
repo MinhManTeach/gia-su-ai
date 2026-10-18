@@ -7,8 +7,8 @@ Thứ tự: T-00 → (T-01, T-02, T-03 song song) → (T-04, T-05) → T-06 → 
 | [T-00](T-00-khung-repo.md) | Claude | Dựng khung repo | Đạt (đã merge) |
 | [T-01](T-01-so-sanh-giong-noi.md) | Claude | So sánh dịch vụ giọng nói tiếng Việt | Đạt (đã merge) |
 | [T-02](T-02-thao-tac-toan.md) | Antigravity | Bản thử 3 kiểu thao tác bài Toán | Sẵn sàng giao · issue #3 |
-| [T-03](T-03-hoc-lieu-mau.md) | Codex | Học liệu mẫu 1 bài + kiểm tra đáp án | Sẵn sàng giao · issue #4 |
-| [T-04](T-04-danh-gia-phan-hoi.md) | Codex | Bộ đánh giá phản hồi của gia sư | Chờ T-03 · issue #5 |
+| [T-03](T-03-hoc-lieu-mau.md) | Codex | Học liệu mẫu 1 bài + kiểm tra đáp án | Đạt (đã merge, PR #7) |
+| [T-04](T-04-danh-gia-phan-hoi.md) | Codex | Bộ đánh giá phản hồi của gia sư | Sẵn sàng giao · issue #5 |
 | [T-05](T-05-chi-phi-buoi-hoc.md) | Muse | Công cụ ước tính chi phí và độ trễ | Sẵn sàng giao · issue #6 |
 | T-06 | Antigravity | Gắn giọng nói vào bản thử | Chờ anh chọn dịch vụ sau T-01 |
 | T-07 | Claude | Báo cáo đi tiếp hay đổi hướng | Chờ T-01…T-06 |
