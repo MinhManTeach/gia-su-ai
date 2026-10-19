@@ -13,9 +13,6 @@ class Mode1DragDrop {
     this.state = {
       // Kho ban đầu số 27: 2 chục, 7 đơn vị
       // Kho ban đầu số 15: 1 chục, 5 đơn vị
-      // Bảng gộp: tens (que chục) và units (khối đơn vị)
-      tensInBoard: 0,
-      unitsInBoard: 0,
       hasGrouped: false,
       items: [] // Danh sách các vật phẩm (que chục, khối đơn vị)
     };
@@ -35,29 +32,33 @@ class Mode1DragDrop {
 
     // Số 27: 2 que chục
     this.state.items.push(
-      { id: 'ten-27-1', type: 'ten', numValue: 10, source: 'num27', location: 'num27', label: '1 chục' },
-      { id: 'ten-27-2', type: 'ten', numValue: 10, source: 'num27', location: 'num27', label: '1 chục' }
+      { id: 'ten-27-1', type: 'ten', source: 'num27', location: 'num27' },
+      { id: 'ten-27-2', type: 'ten', source: 'num27', location: 'num27' }
     );
     // Số 27: 7 khối đơn vị
     for (let i = 1; i <= 7; i++) {
       this.state.items.push(
-        { id: `unit-27-${i}`, type: 'unit', numValue: 1, source: 'num27', location: 'num27', label: '1' }
+        { id: `unit-27-${i}`, type: 'unit', source: 'num27', location: 'num27' }
       );
     }
 
     // Số 15: 1 que chục
     this.state.items.push(
-      { id: 'ten-15-1', type: 'ten', numValue: 10, source: 'num15', location: 'num15', label: '1 chục' }
+      { id: 'ten-15-1', type: 'ten', source: 'num15', location: 'num15' }
     );
     // Số 15: 5 khối đơn vị
     for (let i = 1; i <= 5; i++) {
       this.state.items.push(
-        { id: `unit-15-${i}`, type: 'unit', numValue: 1, source: 'num15', location: 'num15', label: '1' }
+        { id: `unit-15-${i}`, type: 'unit', source: 'num15', location: 'num15' }
       );
     }
   }
 
   render() {
+    window.renderKeepingFocus(this.container, () => this.renderNow());
+  }
+
+  renderNow() {
     const unitsInBoardCount = this.state.items.filter(it => it.location === 'board-units').length;
     const tensInBoardCount = this.state.items.filter(it => it.location === 'board-tens').length;
     const canGroup = unitsInBoardCount >= 10 && !this.state.hasGrouped;
@@ -239,8 +240,38 @@ class Mode1DragDrop {
   attachDragEvents(element, item) {
     // Pointer Events để hỗ trợ cả chuột PC và ngón tay cảm ứng trên iPad/tablet
     let startX = 0, startY = 0;
-    let initialX = 0, initialY = 0;
+    let startScrollY = 0;
     let isDragging = false;
+    let autoScrollTimer = null;
+    let lastX = 0, lastY = 0;
+
+    // Đặt vật phẩm theo ngón tay/chuột, tính cả phần trang đã cuộn kể từ lúc bắt đầu kéo
+    const moveTo = (x, y) => {
+      const dx = x - startX;
+      const dy = y - startY + (window.scrollY - startScrollY);
+      element.style.transform = `translate3d(${dx}px, ${dy}px, 0)`;
+    };
+
+    // Kéo gần mép trên/dưới màn hình thì tự cuộn trang, để trẻ kéo tới được bảng tính
+    // trên máy tính bảng (vật phẩm dùng touch-action: none nên trang không tự cuộn khi kéo).
+    const EDGE = 80;
+    const stopAutoScroll = () => {
+      if (autoScrollTimer) cancelAnimationFrame(autoScrollTimer);
+      autoScrollTimer = null;
+    };
+    const autoScroll = () => {
+      let step = 0;
+      if (lastY > window.innerHeight - EDGE) step = 12;
+      else if (lastY < EDGE) step = -12;
+      if (step !== 0) {
+        window.scrollBy(0, step);
+        moveTo(lastX, lastY);
+        this.highlightDropzoneAt(lastX, lastY, item.type);
+        autoScrollTimer = requestAnimationFrame(autoScroll);
+      } else {
+        autoScrollTimer = null;
+      }
+    };
 
     const onPointerDown = (e) => {
       // Chỉ nhận click chuột trái hoặc chạm ngón tay
@@ -250,6 +281,7 @@ class Mode1DragDrop {
       isDragging = false;
       startX = e.clientX;
       startY = e.clientY;
+      startScrollY = window.scrollY;
       element.classList.add('is-touching');
 
       this.logger.log('keo-tha', 'CHAM_VAT_PHAM', {
@@ -274,17 +306,21 @@ class Mode1DragDrop {
       }
 
       if (isDragging) {
-        element.style.transform = `translate3d(${dx}px, ${dy}px, 0)`;
+        lastX = e.clientX;
+        lastY = e.clientY;
+        moveTo(lastX, lastY);
         element.style.zIndex = '1000';
 
         // Highlight dropzone dưới con trỏ
         this.highlightDropzoneAt(e.clientX, e.clientY, item.type);
+        if (!autoScrollTimer) autoScroll();
       }
     };
 
     const onPointerUp = (e) => {
       if (!element.hasPointerCapture(e.pointerId)) return;
       element.releasePointerCapture(e.pointerId);
+      stopAutoScroll();
       element.classList.remove('is-touching', 'is-dragging');
       element.style.transform = '';
       element.style.zIndex = '';
@@ -310,6 +346,7 @@ class Mode1DragDrop {
     const onPointerCancel = (e) => {
       if (!element.hasPointerCapture(e.pointerId)) return;
       element.releasePointerCapture(e.pointerId);
+      stopAutoScroll();
       element.classList.remove('is-touching', 'is-dragging');
       element.style.transform = '';
       element.style.zIndex = '';
@@ -320,6 +357,14 @@ class Mode1DragDrop {
     element.addEventListener('pointermove', onPointerMove);
     element.addEventListener('pointerup', onPointerUp);
     element.addEventListener('pointercancel', onPointerCancel);
+
+    // Bàn phím: Enter hoặc Space chuyển vật phẩm giống như chạm
+    element.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        this.handleClickMove(item);
+      }
+    });
   }
 
   findDropzoneAt(x, y) {
@@ -445,10 +490,8 @@ class Mode1DragDrop {
     this.state.items.push({
       id: newTenId,
       type: 'ten',
-      numValue: 10,
       source: 'board-tens',
       location: 'board-tens',
-      label: '1 chục (mới gộp)',
       isNewGrouped: true
     });
 

@@ -14,8 +14,8 @@ class Mode2Column {
       tens: '',     // Ô kết quả hàng chục
       units: '',    // Ô kết quả hàng đơn vị
       activeField: 'units', // Mặc định focus vào ô đơn vị (theo thứ tự tính toán tiểu học)
-      checked: false,
-      isCorrect: null,
+      attemptNo: 0,         // Số lần bấm Kiểm tra với bài đã điền đủ
+      hadFeedback: false,   // Đã nhận phản hồi sai trước đó (đúng sau đó là có hỗ trợ)
       feedbackMessage: '',
       feedbackType: ''
     };
@@ -28,6 +28,10 @@ class Mode2Column {
   }
 
   render() {
+    window.renderKeepingFocus(this.container, () => this.renderNow());
+  }
+
+  renderNow() {
     this.container.innerHTML = `
       <div class="mode2-wrapper">
         <div class="problem-header">
@@ -121,9 +125,8 @@ class Mode2Column {
               <button type="button" class="keypad-btn" data-key="7">7</button>
               <button type="button" class="keypad-btn" data-key="8">8</button>
               <button type="button" class="keypad-btn" data-key="9">9</button>
-              <button type="button" class="keypad-btn keypad-func" data-key="clear" title="Xóa ô này">C</button>
+              <button type="button" class="keypad-btn keypad-func" data-key="clear" title="Xóa số trong ô này">⌫</button>
               <button type="button" class="keypad-btn" data-key="0">0</button>
-              <button type="button" class="keypad-btn keypad-func" data-key="backspace" title="Xóa lùi">⌫</button>
             </div>
             
             <div class="keypad-controls">
@@ -171,7 +174,6 @@ class Mode2Column {
 
     const prevValue = this.state[this.state.activeField];
     this.state[this.state.activeField] = digit;
-    this.state.checked = false; // Reset trạng thái kiểm tra khi trẻ sửa số
 
     this.logger.log('dat-tinh', 'NHAP_CHU_SO', {
       field: this.state.activeField,
@@ -179,14 +181,10 @@ class Mode2Column {
       newValue: digit
     });
 
-    // Tự động chuyển focus thông minh theo quy trình làm toán tiểu học:
-    // Đơn vị -> Ô nhớ (nếu có nhớ) hoặc Chục
+    // Chuyển ô theo thứ tự cố định: Đơn vị -> Ô nhớ -> Chục.
+    // Không phụ thuộc số vừa gõ, để không lộ đúng/sai khi trẻ đang làm dở.
     if (this.state.activeField === 'units') {
-      if (digit === '2') {
-        this.state.activeField = 'remember'; // Gợi ý điền ô nhớ tiếp
-      } else {
-        this.state.activeField = 'tens';
-      }
+      this.state.activeField = 'remember';
     } else if (this.state.activeField === 'remember') {
       this.state.activeField = 'tens';
     }
@@ -198,7 +196,6 @@ class Mode2Column {
     if (!this.state.activeField) return;
     const prevValue = this.state[this.state.activeField];
     this.state[this.state.activeField] = '';
-    this.state.checked = false;
 
     this.logger.log('dat-tinh', 'XOA_CHU_SO', {
       field: this.state.activeField,
@@ -213,8 +210,6 @@ class Mode2Column {
     const t = this.state.tens;
     const r = this.state.remember;
 
-    this.state.checked = true;
-
     // Chưa làm xong
     if (u === '' || t === '') {
       this.state.feedbackType = 'info';
@@ -224,42 +219,50 @@ class Mode2Column {
       return;
     }
 
+    this.state.attemptNo += 1;
+    const attempt = {
+      units: u,
+      tens: t,
+      remember: r,
+      attemptNo: this.state.attemptNo,
+      // Đúng sau khi đã nhận phản hồi sai thì là có hỗ trợ, không phải tự làm
+      afterFeedback: this.state.hadFeedback
+    };
+
     // Trường hợp 1: Đúng hoàn toàn cả phép tính và ô nhớ
     if (u === '2' && t === '4' && r === '1') {
-      this.state.isCorrect = true;
       this.state.feedbackType = 'success';
       this.state.feedbackMessage = '🎉 <strong>Xuất sắc!</strong> Con đã đặt tính và cộng có nhớ rất chính xác: 27 + 15 = 42!';
-      this.logger.log('dat-tinh', 'KIEM_TRA_DUNG_TOAN_DIEN', { units: u, tens: t, remember: r, result: 42 });
+      this.logger.log('dat-tinh', 'KIEM_TRA_DUNG_TOAN_DIEN', { ...attempt, resultCorrect: true, carryCorrect: true });
     }
-    // Trường hợp 2: Kết quả đúng 42 nhưng chưa ghi ô nhớ
+    // Trường hợp 2: Kết quả đúng 42 nhưng ô nhớ trống hoặc ghi sai: chưa tính là làm đủ các bước
     else if (u === '2' && t === '4') {
-      this.state.isCorrect = true;
-      this.state.feedbackType = 'success';
-      this.state.feedbackMessage = '👏 <strong>Kết quả 42 rất đúng!</strong> Con hãy điền thêm số <strong>1</strong> vào ô nhớ ở trên để ghi nhớ bước làm nhé!';
-      this.logger.log('dat-tinh', 'KIEM_TRA_DUNG_THIEU_NHO', { units: u, tens: t, remember: r });
+      this.state.feedbackType = 'info';
+      this.state.feedbackMessage = r === ''
+        ? '👏 <strong>Kết quả 42 rất đúng!</strong> Con hãy điền thêm số nhớ vào ô nhớ ở trên để ghi lại bước làm nhé!'
+        : '👏 <strong>Kết quả 42 rất đúng!</strong> Con xem lại số trong ô nhớ nhé: 7 + 5 được mấy chục?';
+      this.logger.log('dat-tinh', 'KIEM_TRA_DUNG_THIEU_NHO', { ...attempt, resultCorrect: true, carryCorrect: false });
     }
     // Trường hợp 3: Lỗi điển hình quên nhớ (ra kết quả 32)
     else if (u === '2' && t === '3') {
-      this.state.isCorrect = false;
       this.state.feedbackType = 'warning';
       this.state.feedbackMessage = '💡 Con đã tính đúng 7 + 5 = 12 (viết 2). Nhưng ở hàng chục: 2 + 1 = 3, con hãy nhớ <strong>cộng thêm 1</strong> được nhớ sang nhé!';
-      this.logger.log('dat-tinh', 'KIEM_TRA_LOI_QUEN_NHO', { units: u, tens: t, remember: r });
+      this.logger.log('dat-tinh', 'KIEM_TRA_LOI_QUEN_NHO', { ...attempt, resultCorrect: false });
     }
     // Trường hợp 4: Sai hàng đơn vị
     else if (u !== '2') {
-      this.state.isCorrect = false;
       this.state.feedbackType = 'warning';
       this.state.feedbackMessage = '🔍 Con hãy kiểm tra lại hàng đơn vị nhé: <strong>7 + 5 = ?</strong> (viết mấy và nhớ mấy nhỉ?)';
-      this.logger.log('dat-tinh', 'KIEM_TRA_SAI_DON_VI', { units: u, tens: t, remember: r });
+      this.logger.log('dat-tinh', 'KIEM_TRA_SAI_DON_VI', { ...attempt, resultCorrect: false });
     }
     // Trường hợp 5: Sai hàng chục
     else {
-      this.state.isCorrect = false;
       this.state.feedbackType = 'warning';
       this.state.feedbackMessage = '🔍 Hàng đơn vị đúng rồi! Con hãy tính lại hàng chục: 2 + 1 thêm 1 nhớ bằng bao nhiêu nhé!';
-      this.logger.log('dat-tinh', 'KIEM_TRA_SAI_CHUC', { units: u, tens: t, remember: r });
+      this.logger.log('dat-tinh', 'KIEM_TRA_SAI_CHUC', { ...attempt, resultCorrect: false });
     }
 
+    if (this.state.feedbackType === 'warning') this.state.hadFeedback = true;
     this.render();
   }
 
@@ -269,8 +272,9 @@ class Mode2Column {
       tens: '',
       units: '',
       activeField: 'units',
-      checked: false,
-      isCorrect: null,
+      // Làm lại cùng một bài vẫn giữ số lần thử và dấu đã nhận phản hồi
+      attemptNo: this.state.attemptNo,
+      hadFeedback: this.state.hadFeedback,
       feedbackMessage: '',
       feedbackType: ''
     };
@@ -290,6 +294,7 @@ class Mode2Column {
       // Hỗ trợ Enter hoặc Space trên phím tiếp cận
       box.addEventListener('keydown', (e) => {
         if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
           this.setActiveField(box.dataset.field);
         }
       });
@@ -301,8 +306,6 @@ class Mode2Column {
       btn.addEventListener('click', () => {
         const key = btn.dataset.key;
         if (key === 'clear') {
-          this.handleBackspace();
-        } else if (key === 'backspace') {
           this.handleBackspace();
         } else {
           this.inputDigit(key);
@@ -327,6 +330,12 @@ class Mode2Column {
       this._keydownHandler = (e) => {
         // Chỉ nhận khi mode 2 đang hiển thị
         if (this.container.offsetParent === null) return;
+        // Phím đang đứng trên nút, ô nhập hoặc thẻ chuyển chế độ đã có xử lý riêng:
+        // không để Enter vừa bấm nút vừa chấm bài.
+        if (e.target instanceof Element && e.target.closest('button, a, input, textarea, select, [role="textbox"], [role="tab"]')) {
+          if (e.key === 'Enter' || e.key === ' ') return;
+          if (!e.target.closest('.mode2-wrapper')) return;
+        }
 
         if (e.key >= '0' && e.key <= '9') {
           this.inputDigit(e.key);

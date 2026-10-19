@@ -13,12 +13,15 @@ class Mode3Choice {
       { id: 'A', value: 32, label: '32', isCorrect: false, hint: '💡 Con đã tính đúng hàng đơn vị rồi. Ở hàng chục, con hãy kiểm tra xem mình đã cộng thêm số nhớ chưa nhé!' },
       { id: 'B', value: 42, label: '42', isCorrect: true, hint: '🎉 <strong>Chính xác!</strong> Con đã thực hiện phép cộng có nhớ rất tốt!' },
       { id: 'C', value: 41, label: '41', isCorrect: false, hint: '🔍 Con hãy kiểm tra lại phép tính ở hàng đơn vị (7 + 5) nhé!' },
-      { id: 'D', value: 52, label: '52', isCorrect: false, hint: '🔍 Hàng đơn vị đúng rồi! Con hãy tính lại hàng chục và cộng thêm số đã nhớ nhé!' }
+      { id: 'D', value: 52, label: '52', isCorrect: false, hint: '🔍 Hàng đơn vị đúng rồi! Ở hàng chục, con kiểm tra xem mình có cộng số nhớ nhiều hơn một lần không nhé!' }
     ];
+
+    this.correctValue = this.options.find(o => o.isCorrect).value;
 
     this.state = {
       selectedOptionId: null,
-      isChecked: false,
+      attemptNo: 0,       // Số lần bấm Kiểm tra
+      hadFeedback: false, // Đã chọn sai và nhận gợi ý: đúng sau đó là có hỗ trợ
       feedbackMessage: '',
       feedbackType: ''
     };
@@ -31,6 +34,10 @@ class Mode3Choice {
   }
 
   render() {
+    window.renderKeepingFocus(this.container, () => this.renderNow());
+  }
+
+  renderNow() {
     const selected = this.options.find(o => o.id === this.state.selectedOptionId);
 
     this.container.innerHTML = `
@@ -93,7 +100,6 @@ class Mode3Choice {
 
     const opt = this.options.find(o => o.id === optId);
     this.state.selectedOptionId = optId;
-    this.state.isChecked = false;
     this.state.feedbackMessage = '';
     this.state.feedbackType = '';
 
@@ -109,25 +115,28 @@ class Mode3Choice {
     if (!this.state.selectedOptionId) return;
 
     const opt = this.options.find(o => o.id === this.state.selectedOptionId);
-    this.state.isChecked = true;
+    this.state.attemptNo += 1;
+    const attempt = {
+      chosenId: opt.id,
+      chosenValue: opt.value,
+      correctValue: this.correctValue,
+      attemptNo: this.state.attemptNo,
+      // Chọn đúng sau khi đã sai và đọc gợi ý thì không tính là tự làm
+      afterFeedback: this.state.hadFeedback
+    };
 
     if (opt.isCorrect) {
       this.state.feedbackType = 'success';
       this.state.feedbackMessage = opt.hint;
-      this.logger.log('trac-nghiem', 'KIEM_TRA_DAP_AN_DUNG', {
-        chosenId: opt.id,
-        chosenValue: opt.value,
-        correctValue: 42
-      });
+      this.logger.log('trac-nghiem', 'KIEM_TRA_DAP_AN_DUNG', attempt);
     } else {
       this.state.feedbackType = 'warning';
       this.state.feedbackMessage = opt.hint;
       this.logger.log('trac-nghiem', 'KIEM_TRA_DAP_AN_SAI', {
-        chosenId: opt.id,
-        chosenValue: opt.value,
-        correctValue: 42,
-        misconception: opt.value === 32 ? 'quên_nhớ_hàng_chục' : 'tính_nhầm'
+        ...attempt,
+        misconception: opt.value === 32 ? 'quên_nhớ_hàng_chục' : opt.value === 52 ? 'cộng_nhớ_thừa' : 'tính_nhầm'
       });
+      this.state.hadFeedback = true;
     }
 
     this.render();
@@ -136,7 +145,9 @@ class Mode3Choice {
   reset() {
     this.state = {
       selectedOptionId: null,
-      isChecked: false,
+      // Làm lại cùng một câu vẫn giữ số lần thử và dấu đã nhận gợi ý
+      attemptNo: this.state.attemptNo,
+      hadFeedback: this.state.hadFeedback,
       feedbackMessage: '',
       feedbackType: ''
     };
@@ -151,11 +162,6 @@ class Mode3Choice {
       btn.addEventListener('click', () => {
         const id = btn.dataset.optionId;
         this.selectOption(id);
-      });
-      btn.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          this.selectOption(btn.dataset.optionId);
-        }
       });
     });
 

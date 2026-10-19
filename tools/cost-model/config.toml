@@ -68,6 +68,10 @@ tts_giay = 2.0   # đọc: có câu trả lời -> phát ra âm thanh đầu ti�
 # Giả định gốc từ T-01 mục 3: mic chỉ gửi khi trẻ nói nhờ phát hiện
 # giọng (VAD) ~10 phút âm thanh gửi đi; AI nói ~8 phút ~= 6.000 ký tự
 # tiếng Việt cho buổi 25 phút ở kịch bản "trung bình".
+#
+# Token vào mô hình: mỗi lượt gửi lại cả lịch sử hội thoại, nên lượt thứ k
+# (tính từ 0) gửi token_vao_moi_luot + k x token_lich_su_moi_luot.
+# Tổng cả buổi = n x token_vao_moi_luot + token_lich_su_moi_luot x n(n-1)/2.
 # ---------------------------------------------------------------------
 
 [kich_ban.it]
@@ -77,6 +81,7 @@ ky_tu_ai_noi = 3000    # ký tự AI đọc trong buổi
 luot_hoi_thoai = 8     # số lượt hội thoại trong buổi
 token_vao_moi_luot = 400  # GIẢ ĐỊNH TẠM — chờ đo ở T-06
 token_ra_moi_luot = 150   # GIẢ ĐỊNH TẠM — chờ đo ở T-06
+token_lich_su_moi_luot = 200  # GIẢ ĐỊNH TẠM: lịch sử tăng thêm mỗi lượt (lời trẻ + lời AI) — chờ đo ở T-06
 
 [kich_ban.trung_binh]
 ten_hien_thi = "Trẻ nói trung bình"
@@ -85,6 +90,7 @@ ky_tu_ai_noi = 6000
 luot_hoi_thoai = 16
 token_vao_moi_luot = 400  # GIẢ ĐỊNH TẠM — chờ đo ở T-06
 token_ra_moi_luot = 150   # GIẢ ĐỊNH TẠM — chờ đo ở T-06
+token_lich_su_moi_luot = 200  # GIẢ ĐỊNH TẠM: lịch sử tăng thêm mỗi lượt (lời trẻ + lời AI) — chờ đo ở T-06
 
 [kich_ban.nhieu]
 ten_hien_thi = "Trẻ nói nhiều"
@@ -93,6 +99,7 @@ ky_tu_ai_noi = 9000
 luot_hoi_thoai = 24
 token_vao_moi_luot = 400  # GIẢ ĐỊNH TẠM — chờ đo ở T-06
 token_ra_moi_luot = 150   # GIẢ ĐỊNH TẠM — chờ đo ở T-06
+token_lich_su_moi_luot = 200  # GIẢ ĐỊNH TẠM: lịch sử tăng thêm mỗi lượt (lời trẻ + lời AI) — chờ đo ở T-06
 
 # ---------------------------------------------------------------------
 # PHƯƠNG ÁN GIÁ: mỗi phương án ghép 1 dịch vụ STT + 1 dịch vụ TTS.

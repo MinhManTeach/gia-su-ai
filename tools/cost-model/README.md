@@ -49,8 +49,15 @@ khớp bảng T-01.
 2. **Độ trễ mỗi lượt** (2 + 2 + 2 = 6 giây) là giả định tạm trong config,
    chờ số đo thật ở T-06.
 3. **Token mỗi lượt** (400 vào / 150 ra) là giả định tạm, chờ đo ở T-06.
+   Mỗi lượt gửi lại cả lịch sử hội thoại, nên token vào tăng dần:
+   lượt thứ k (tính từ 0) gửi `400 + k × 200` token (`token_lich_su_moi_luot = 200`,
+   cũng là giả định tạm). Tổng cả buổi = n × 400 + 200 × n(n−1)/2.
+   Ví dụ buổi trung bình 16 lượt: 16 × 400 + 200 × 16 × 15 / 2 = 6.400 + 24.000
+   = **30.400 token vào**, gấp gần 5 lần nếu coi mỗi lượt cố định 400 token.
 4. **Giá mô hình ngôn ngữ và hạ tầng = 0** vì chưa chọn mô hình (T-01)
-   và chưa có kiến trúc hạ tầng. Điền vào `config.toml` khi có số.
+   và chưa có kiến trúc hạ tầng. Điền vào `config.toml` khi có số. Khi hạng mục
+   nào còn bằng 0, bảng Markdown in cảnh báo ngay đầu, và CSV ghi tên hạng mục
+   đó ở cột `hang_muc_chua_co_gia`.
 5. Tháng = số buổi/tuần × 52 / 12 (3 buổi/tuần ≈ 13 buổi/tháng, như T-01).
 
 ## Mở rộng

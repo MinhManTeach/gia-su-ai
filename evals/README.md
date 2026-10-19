@@ -10,7 +10,7 @@ node evals/run.mjs
 node evals/run.mjs --format json
 ```
 
-The default evaluator is entirely offline. It does not call an API or send data anywhere. The text checks normalize Vietnamese diacritics and look for the explicit phrases and forbidden answer values declared in the rubric. For forbidden answers from 0 to 99, checks recognize both digits and common Vietnamese words (including variants for four and five). A pass rate is a deterministic rubric smoke check, not a semantic proof that a tutor response is safe or pedagogically sound; review real model output before relying on it.
+The default evaluator is entirely offline. It does not call an API or send data anywhere. The text checks keep Vietnamese accents and match whole phrases only, so "gốc" never counts as "gõ" and "chưa dùng" never counts as "chưa đúng". Forbidden answers from 0 to 100 are recognized as digits, as Vietnamese words including short spoken forms ("bốn hai", "ba tư", "hai lăm"), and as tens and units ("4 chục 2 đơn vị"). Every scenario also fails if the response labels the learner ("lười", "dốt", "chậm hiểu"...). Some scenarios carry `goodResponses`, paraphrased answers that must pass, so the rubric is not tuned only to the fake tutor's wording. A pass rate is a deterministic rubric smoke check, not a semantic proof that a tutor response is safe or pedagogically sound; review real model output before relying on it.
 
 ## Connect a tutor model later
 
@@ -23,4 +23,4 @@ export async function respond(scenario) {
 }
 ```
 
-Run it with `node evals/run.mjs --adapter ./path/to/adapter.mjs`. No model SDK, credentials, network dependency, or API is included in this evaluation package. Keep any future adapter opt-in and locally configured.
+Run it with `node evals/run.mjs --adapter ./path/to/adapter.mjs`. If the adapter throws, returns something other than a string, or takes longer than 30 seconds, only that scenario fails and the run continues. No model SDK, credentials, network dependency, or API is included in this evaluation package. Keep any future adapter opt-in and locally configured.

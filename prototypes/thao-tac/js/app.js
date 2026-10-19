@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function renderEventRow(event) {
     const tr = document.createElement('tr');
-    tr.className = `log-row log-mode-${event.mode}`;
+    tr.className = 'log-row';
 
     const badgeModeClass = {
       'keo-tha': 'badge-mode-1',
@@ -66,12 +66,23 @@ document.addEventListener('DOMContentLoaded', () => {
       .replace(/\n\s*/g, ' | ')
       .trim();
 
-    tr.innerHTML = `
-      <td class="col-time">${event.timestamp}</td>
-      <td class="col-mode"><span class="badge ${badgeModeClass}">${event.mode}</span></td>
-      <td class="col-type"><span class="event-type-name">${event.type}</span></td>
-      <td class="col-detail"><code class="detail-code">${detailFormatted || '-'}</code></td>
-    `;
+    // Dựng ô bằng textContent: dữ liệu log không bao giờ được hiểu là HTML
+    const addCell = (className, text, innerTag, innerClass) => {
+      const td = document.createElement('td');
+      td.className = className;
+      const inner = document.createElement(innerTag);
+      inner.className = innerClass;
+      inner.textContent = text;
+      td.appendChild(inner);
+      tr.appendChild(td);
+    };
+    const timeCell = document.createElement('td');
+    timeCell.className = 'col-time';
+    timeCell.textContent = event.timestamp;
+    tr.appendChild(timeCell);
+    addCell('col-mode', event.mode, 'span', `badge ${badgeModeClass}`);
+    addCell('col-type', event.type, 'span', 'event-type-name');
+    addCell('col-detail', detailFormatted || '-', 'code', 'detail-code');
     return tr;
   }
 
@@ -122,14 +133,15 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Đọc tham số URL để chuyển tab hoặc demo nếu có
+  // Đọc tham số URL để chuyển tab hoặc demo nếu có.
+  // Chỉ nhận giá trị trong danh sách cho phép; giá trị lạ không được ghi vào log.
+  const VALID_MODES = ['mode1', 'mode2', 'mode3'];
   const urlParams = new URLSearchParams(window.location.search);
   const hashMode = window.location.hash ? window.location.hash.replace('#', '') : null;
-  const initialMode = urlParams.get('mode') || hashMode || 'mode1';
+  const requestedMode = urlParams.get('mode') || hashMode || 'mode1';
+  const initialMode = VALID_MODES.includes(requestedMode) ? requestedMode : 'mode1';
 
-  if (['mode1', 'mode2', 'mode3'].includes(initialMode)) {
-    switchTab(initialMode);
-  }
+  switchTab(initialMode);
 
   // Tự động kích hoạt trạng thái demo phục vụ kiểm thử và chụp ảnh màn hình nếu có ?demo=1
   if (urlParams.get('demo') === '1') {
@@ -153,9 +165,8 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Ghi log sự kiện khởi tạo
+  // Chỉ ghi dữ liệu cần để hiểu cách làm bài; không ghi thông tin thiết bị
   logger.log('chung', 'KHOI_DONG_UNG_DUNG', {
-    screenResolution: `${window.innerWidth}x${window.innerHeight}`,
-    userAgent: navigator.userAgent,
     initialMode: initialMode
   });
 });

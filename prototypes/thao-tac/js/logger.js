@@ -8,6 +8,7 @@ class EventLogger {
   constructor() {
     this.events = [];
     this.subscribers = [];
+    this.nextId = 1; // Không reset khi xóa log để id luôn duy nhất trong phiên
   }
 
   /**
@@ -21,7 +22,7 @@ class EventLogger {
     const timeStr = now.toLocaleTimeString('vi-VN', { hour12: false }) + '.' + String(now.getMilliseconds()).padStart(3, '0');
     
     const eventObj = {
-      id: this.events.length + 1,
+      id: this.nextId++,
       timestamp: timeStr,
       isoTime: now.toISOString(),
       mode: mode,

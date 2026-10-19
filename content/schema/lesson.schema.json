@@ -27,7 +27,7 @@
             }
           }
         },
-        "note": { "const": "chưa duyệt" }
+        "note": { "type": "string", "minLength": 1, "description": "\"chưa duyệt\" khi approvalStatus là \"nháp\"" }
       }
     },
     "prerequisites": { "type": "array", "items": { "type": "string", "minLength": 1 } },
@@ -63,6 +63,6 @@
         }
       }
     },
-    "approvalStatus": { "const": "nháp" }
+    "approvalStatus": { "enum": ["nháp", "đã duyệt"] }
   }
 }

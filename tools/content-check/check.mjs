@@ -4,6 +4,10 @@ import { pathToFileURL } from 'node:url';
 const isRecord = (value) => value !== null && typeof value === 'object' && !Array.isArray(value);
 const nonEmptyString = (value) => typeof value === 'string' && value.trim().length > 0;
 const digitCount = (value) => String(Math.abs(value)).length;
+const ADDITION = /(\d+)\s*\+\s*(\d+)/;
+const APPROVAL_STATUSES = ['nháp', 'đã duyệt'];
+const HINT_LEVELS = ['reminder', 'nextStep', 'workedExample'];
+const containsNumber = (text, number) => new RegExp(`(^|\\D)${number}(?!\\d)`).test(text);
 
 export function validateLesson(lesson) {
   const errors = [];
@@ -18,12 +22,25 @@ export function validateLesson(lesson) {
     errors.push('referenceSources must be an object');
   } else {
     if (!Array.isArray(lesson.referenceSources.items)) errors.push('referenceSources.items must be an array');
-    if (lesson.referenceSources.note !== 'chưa duyệt') errors.push('referenceSources.note must be "chưa duyệt"');
+    if (!nonEmptyString(lesson.referenceSources.note)) errors.push('referenceSources.note must be a non-empty string');
   }
   if (!Array.isArray(lesson.prerequisites) || lesson.prerequisites.some((item) => !nonEmptyString(item))) {
     errors.push('prerequisites must be an array of non-empty strings');
   }
-  if (lesson.approvalStatus !== 'nháp') errors.push('approvalStatus must be "nháp"');
+  if (!APPROVAL_STATUSES.includes(lesson.approvalStatus)) {
+    errors.push(`approvalStatus must be one of: ${APPROVAL_STATUSES.join(', ')}`);
+  } else if (isRecord(lesson.referenceSources)) {
+    // Nháp phải ghi rõ "chưa duyệt"; bài đã duyệt phải có nguồn đối chiếu
+    if (lesson.approvalStatus === 'nháp' && lesson.referenceSources.note !== 'chưa duyệt') {
+      errors.push('referenceSources.note must be "chưa duyệt" while approvalStatus is "nháp"');
+    }
+    if (lesson.approvalStatus === 'đã duyệt') {
+      if (!Array.isArray(lesson.referenceSources.items) || lesson.referenceSources.items.length === 0) {
+        errors.push('an approved lesson must list at least one reference source');
+      }
+      if (lesson.referenceSources.note === 'chưa duyệt') errors.push('an approved lesson cannot keep the note "chưa duyệt"');
+    }
+  }
 
   if (!Array.isArray(lesson.questions)) {
     errors.push('questions must be an array');
@@ -35,6 +52,7 @@ export function validateLesson(lesson) {
 
   const seenIds = new Set();
   const groupDifficulty = new Map();
+  const groupSizes = new Map();
   for (const question of lesson.questions) {
     if (!isRecord(question)) {
       errors.push('question must be an object');
@@ -58,6 +76,13 @@ export function validateLesson(lesson) {
     if (operandsAreIntegers) {
       const [left, right] = question.operands;
       const sum = left + right;
+      // Đề trẻ nhìn thấy phải đúng là phép tính mà máy dùng để chấm
+      if (nonEmptyString(question.prompt)) {
+        const promptMatch = question.prompt.match(ADDITION);
+        if (!promptMatch || Number(promptMatch[1]) !== left || Number(promptMatch[2]) !== right) {
+          errors.push(`${id}: prompt must show the same addition as operands (${left} + ${right})`);
+        }
+      }
       const unitsCarry = Math.floor(((left % 10) + (right % 10)) / 10);
       const tensCarry = Math.floor((Math.floor(left / 10) + Math.floor(right / 10) + unitsCarry) / 10);
       const carryCount = unitsCarry + tensCarry;
@@ -74,15 +99,25 @@ export function validateLesson(lesson) {
         }
       }
     }
-    if (!nonEmptyString(question.equivalentGroup)) errors.push(`${id}: equivalentGroup must be a non-empty string`);
+    if (!nonEmptyString(question.equivalentGroup)) {
+      errors.push(`${id}: equivalentGroup must be a non-empty string`);
+    } else {
+      groupSizes.set(question.equivalentGroup, [...(groupSizes.get(question.equivalentGroup) ?? []), id]);
+    }
 
     const hints = question.hints;
-    if (!isRecord(hints)
-      || !['reminder', 'nextStep', 'workedExample'].every((key) => nonEmptyString(hints[key]))) {
+    if (!isRecord(hints) || !HINT_LEVELS.every((key) => nonEmptyString(hints[key]))) {
       errors.push(`${id}: hints must include non-empty reminder, nextStep, and workedExample levels`);
     }
+    if (isRecord(hints) && answerValid) {
+      for (const level of HINT_LEVELS) {
+        if (nonEmptyString(hints[level]) && containsNumber(hints[level], question.answer)) {
+          errors.push(`${id}: hint ${level} must not reveal the question answer`);
+        }
+      }
+    }
     if (isRecord(hints) && nonEmptyString(hints.workedExample) && operandsAreIntegers) {
-      const exampleMatch = hints.workedExample.match(/(\d+)\s*\+\s*(\d+)/);
+      const exampleMatch = hints.workedExample.match(ADDITION);
       if (!exampleMatch) {
         errors.push(`${id}: workedExample must include a sample addition`);
       } else {
@@ -95,8 +130,22 @@ export function validateLesson(lesson) {
         if (exampleLeft + exampleRight === question.answer) {
           errors.push(`${id}: workedExample must not reveal the question answer`);
         }
+        // Ví dụ mẫu cũng phải là phép cộng có nhớ và ghi kết quả đúng
+        if ((exampleLeft % 10) + (exampleRight % 10) < 10) {
+          errors.push(`${id}: workedExample must be an addition that requires carrying`);
+        }
+        const resultMatch = hints.workedExample.match(/được\s+(\d+)\s*\.?\s*$/);
+        if (!resultMatch) {
+          errors.push(`${id}: workedExample must end with its result ("được N")`);
+        } else if (Number(resultMatch[1]) !== exampleLeft + exampleRight) {
+          errors.push(`${id}: workedExample result ${resultMatch[1]} does not equal ${exampleLeft} + ${exampleRight}`);
+        }
       }
     }
+  }
+  // Mỗi nhóm tương đương cần ít nhất 2 câu để có câu thay thế khi kiểm tra độc lập
+  for (const [group, ids] of groupSizes) {
+    if (ids.length < 2) errors.push(`${ids[0]}: equivalent group ${group} needs at least 2 questions`);
   }
   return errors;
 }
