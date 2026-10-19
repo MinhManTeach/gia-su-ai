@@ -1107,3 +1107,32 @@ body {
     grid-template-columns: 1fr;
   }
 }
+
+/* Máy tính bảng xoay ngang: đặt kho đồ vật và bảng tính cạnh nhau
+   để trẻ kéo được vật phẩm tới bảng mà không phải cuộn trang trước. */
+@media (max-width: 1280px) and (orientation: landscape) {
+  .mode1-wrapper {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr);
+    align-items: start;
+    gap: 16px;
+  }
+  .mode1-wrapper .problem-header {
+    grid-column: 1 / -1;
+  }
+  .mode1-wrapper .materials-area {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 12px;
+    gap: 8px;
+  }
+  .mode1-wrapper .source-plus {
+    text-align: center;
+  }
+  .mode1-wrapper .workspace-board {
+    padding: 14px;
+  }
+  .mode1-wrapper .board-column {
+    min-height: 160px;
+  }
+}

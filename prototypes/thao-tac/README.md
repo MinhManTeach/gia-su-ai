@@ -33,7 +33,8 @@ Sau đó truy cập: `http://localhost:8080` (hoặc cổng mà terminal hiển 
   - Số $15$: 1 que chục ($1 \times 10$) và 5 khối đơn vị vuông.
 - **Thao tác**:
   - Trẻ có thể kéo thả bằng chuột trên PC hoặc ngón tay trên máy tính bảng (hỗ trợ Pointer Events chuẩn).
-  - Có thể chạm/click vào que tính hoặc khối đơn vị để di chuyển nhanh vào bảng tính.
+  - Có thể chạm/click vào que tính hoặc khối đơn vị để di chuyển nhanh vào bảng tính. Dùng bàn phím thì Tab tới vật phẩm rồi bấm Enter hoặc Space.
+  - Trên máy tính bảng xoay ngang, kho đồ vật và bảng tính nằm cạnh nhau. Kéo vật phẩm tới gần mép trên/dưới màn hình thì trang tự cuộn.
   - Khi hàng đơn vị có $\ge 10$ khối, nút **"✨ Gộp 10 đơn vị thành 1 chục"** sẽ sáng lên. Bấm vào nút này, 10 khối đơn vị sẽ gộp thành 1 que chục mới chuyển sang Cột Chục.
   - Kết quả sau khi gộp: 4 que chục và 2 khối đơn vị $\rightarrow 42$.
   - Có nút **🔄 Làm lại** để thực hành lại bất kỳ lúc nào mà không bị phạt hay chấm sai giữa chừng.
@@ -48,7 +49,8 @@ Sau đó truy cập: `http://localhost:8080` (hoặc cổng mà terminal hiển 
   - Bàn phím số cảm ứng tích hợp (On-screen Keypad): Nút bấm lớn ($> 54\text{px}$), giúp trẻ dùng máy tính bảng thao tác tiện lợi mà không bị bàn phím ảo của hệ điều hành che khuất màn hình.
   - Hỗ trợ cả bàn phím máy tính thông thường (phím $0$–$9$, Backspace, Enter).
 - **Phản hồi sư phạm**:
-  - Không báo sai khi trẻ đang gõ dở từng ô.
+  - Không báo sai khi trẻ đang gõ dở từng ô. Sau ô đơn vị, con trỏ luôn chuyển sang ô nhớ rồi ô chục, không phụ thuộc số vừa gõ.
+  - Enter khi đang đứng ở một nút chỉ bấm nút đó, không chấm bài. Enter chỉ chấm bài khi không có nút nào đang được chọn.
   - Chỉ khi bấm nút **"✅ Kiểm tra kết quả"**, hệ thống mới đưa ra lời nhận xét nhẹ nhàng, phân tích rõ ràng (ví dụ: phát hiện trẻ quên cộng số nhớ sang hàng chục khi tính ra $32$).
 
 ### 🎯 Cách 3: Chọn 1 trong 4 đáp án (Trắc nghiệm)
@@ -58,7 +60,7 @@ Sau đó truy cập: `http://localhost:8080` (hoặc cổng mà terminal hiển 
   - **A. 32**: Bẫy quên nhớ ($2 + 1 = 3$, $7 + 5 = 12$ ghi 2).
   - **B. 42**: Đáp án đúng.
   - **C. 41**: Lỗi tính toán hàng đơn vị.
-  - **D. 52**: Lỗi nhớ nhầm thành 2 chục.
+  - **D. 52**: Lỗi cộng số nhớ thừa (thành 2 chục).
 - **Thao tác**: Các nút lựa chọn to rõ (cao $> 68\text{px}$), bo góc, có highlight khi chọn. Trẻ có thể đổi ý chọn đáp án khác trước khi bấm nút kiểm tra.
 
 ---
@@ -67,8 +69,11 @@ Sau đó truy cập: `http://localhost:8080` (hoặc cổng mà terminal hiển 
 - Nằm ở cuối trang, tự động ghi nhận **mọi thao tác của học sinh**:
   - Loại thao tác: chuyển tab, chạm vật phẩm, bắt đầu kéo, thả hợp lệ, thả ngoài vùng, gộp 10 đơn vị, chọn ô nhập, gõ chữ số, xóa số, chọn đáp án trắc nghiệm, bấm kiểm tra, làm lại...
   - Giá trị chi tiết: vị trí nguồn, vị trí đích, mã vật phẩm, chữ số đã nhập, đáp án đã chọn, chẩn đoán nguyên nhân lỗi...
+  - Mỗi lần bấm kiểm tra (Cách 2, 3) có `attemptNo` (lần thử thứ mấy) và `afterFeedback` (đã nhận gợi ý sau một lần sai chưa). Đúng sau gợi ý là có hỗ trợ, không phải tự làm.
+  - Mỗi sự kiện có `id` duy nhất trong phiên, kể cả sau khi xóa log. Không ghi thông tin thiết bị như userAgent hay độ phân giải.
   - Thời điểm: Giờ, phút, giây, mili-giây chính xác (`HH:mm:ss.SSS`).
 - **Bảo mật & Quyền riêng tư**:
+  - Bảng log hiện dữ liệu dưới dạng chữ (textContent), không bao giờ hiểu là HTML. Tham số `?mode=` hoặc `#...` lạ bị bỏ qua.
   - Dữ liệu lưu hoàn toàn *in-memory* trong trình duyệt, không gửi đến bất kỳ máy chủ hay dịch vụ bên ngoài nào.
   - Có nút **💾 Xuất JSON** để tải tệp nhật ký sự kiện kiểm thử và nút **🗑️ Xóa log**.
 
