@@ -1,0 +1,37 @@
+name: Test
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      # Liệt kê từng file: `node --test <thư mục>` lỗi trên một số bản Node
+      - name: Trình kiểm tra học liệu (T-03)
+        run: |
+          node --test tools/content-check/test/*.test.mjs
+          node tools/content-check/check.mjs content/toan/lop-2/cong-co-nho-100.v1.json
+
+      - name: Bộ đánh giá phản hồi gia sư (T-04)
+        run: |
+          node --test evals/test/*.test.mjs
+          node evals/run.mjs
+
+      - name: Công cụ chi phí (T-05)
+        run: python -m unittest discover -s tools/cost-model -p 'test_*.py' -v
