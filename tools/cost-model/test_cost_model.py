@@ -133,12 +133,61 @@ class TestChiPhi(unittest.TestCase):
             self.assertNotIn(tu, ma_nguon, f"Phát hiện dùng '{tu}' trong code")
 
     def test_xuat_csv_chay_duoc(self):
-        out = cost_model.ve_csv(self.cp, self.dt)
+        out = cost_model.ve_csv(self.cfg, self.cp, self.dt)
         dong_dau = out.splitlines()[0]
         self.assertIn("tong_buoi_vnd", dong_dau)
         self.assertIn("tre_giay_moi_luot", dong_dau)
         # 2 phương án x 3 kịch bản x 3 thời lượng = 18 dòng dữ liệu
         self.assertEqual(len(out.strip().splitlines()), 1 + 18)
+
+        self.assertIn("hang_muc_chua_co_gia", dong_dau)
+        self.assertIn("mô hình ngôn ngữ; hạ tầng", out.splitlines()[1])
+
+    def test_token_vao_tang_theo_lich_su(self):
+        """Tính tay: 16 lượt x 400 + 200 x 16 x 15 / 2 = 6.400 + 24.000 = 30.400 token."""
+        self.assertEqual(cost_model.tong_token_vao(16, 400, 200), 30400)
+        self.assertEqual(cost_model.tong_token_vao(16, 400, 0), 6400)
+        r = self.lay_dong("Google STT + FPT TTS", "Trẻ nói trung bình", 25)
+        self.assertEqual(r["token_vao_ca_buoi"], 30400)
+
+    def test_gia_mo_hinh_tinh_theo_token_co_lich_su(self):
+        """Giá 1 USD / 1 triệu token vào, 0 ra: 30.400 token x 26.000 / 1.000.000 = 790,4 -> 790 VND."""
+        cfg2 = copy.deepcopy(self.cfg)
+        cfg2["gia"]["llm"]["gia_1m_token_vao"] = 1.0
+        r = next(
+            r for r in cost_model.tinh_chi_phi(cfg2)
+            if r["phuong_an"] == "Google STT + FPT TTS"
+            and r["kich_ban"] == "Trẻ nói trung bình" and r["thoi_luong_phut"] == 25
+        )
+        self.assertEqual(r["llm_vnd"], 790)
+
+    def test_canh_bao_khi_gia_bang_0(self):
+        md = cost_model.ve_markdown(self.cfg, self.cp, self.dt)
+        self.assertIn("CHƯA ĐẦY ĐỦ", md.splitlines()[2])
+        cfg2 = copy.deepcopy(self.cfg)
+        cfg2["gia"]["llm"]["gia_1m_token_vao"] = 1.0
+        cfg2["gia"]["khac"]["ha_tang_vnd_moi_buoi"] = 100
+        self.assertNotIn("CHƯA ĐẦY ĐỦ", cost_model.ve_markdown(cfg2, self.cp, self.dt))
+
+    def test_thieu_khoa_bao_loi_de_hieu(self):
+        cfg2 = copy.deepcopy(self.cfg)
+        del cfg2["kich_ban"]["it"]["luot_hoi_thoai"]
+        with self.assertRaises(SystemExit) as loi:
+            cost_model.kiem_tra_khoa(cfg2)
+        self.assertIn("kich_ban.it", str(loi.exception.code))
+        self.assertIn("luot_hoi_thoai", str(loi.exception.code))
+
+    def test_lam_tron_sau_khi_nhan_ra_thang(self):
+        """Hạ tầng 0,4 VND/buổi: tổng tháng tính trên số chưa làm tròn."""
+        cfg2 = copy.deepcopy(self.cfg)
+        cfg2["gia"]["khac"]["ha_tang_vnd_moi_buoi"] = 0.4
+        r = next(
+            r for r in cost_model.tinh_chi_phi(cfg2)
+            if r["phuong_an"] == "Google STT + FPT TTS"
+            and r["kich_ban"] == "Trẻ nói trung bình" and r["thoi_luong_phut"] == 25
+        )
+        self.assertEqual(r["tong_buoi_vnd"], 5660)
+        self.assertEqual(r["tong_thang_vnd"], round(5660.4 * 13))
 
 
 if __name__ == "__main__":
