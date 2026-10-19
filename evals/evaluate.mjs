@@ -1,55 +1,127 @@
+// Giữ nguyên dấu tiếng Việt: bỏ dấu làm "gốc" khớp "gõ", "chưa dùng" khớp "chưa đúng".
 const normalize = (value) => String(value)
-  .normalize('NFD')
-  .replace(/\p{M}/gu, '')
-  .replace(/[đĐ]/g, 'd')
-  .toLocaleLowerCase('vi');
+  .normalize('NFC')
+  .toLocaleLowerCase('vi')
+  .replace(/\s+/g, ' ');
 
-const includesAny = (text, fragments) => fragments.some((fragment) => text.includes(normalize(fragment)));
+const escapeRegExp = (text) => text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+// Khớp nguyên cụm từ: hai đầu không được dính vào chữ hoặc số khác
+const phrasePattern = (phrase) => new RegExp(
+  `(?<![\\p{L}\\p{N}])${escapeRegExp(normalize(phrase).trim()).replace(/ /g, '\\s+')}(?![\\p{L}\\p{N}])`,
+  'u',
+);
+const findPhrases = (text, phrases) => phrases.filter((phrase) => phrasePattern(phrase).test(text));
+
+// Áp cho mọi tình huống: không gắn nhãn tính cách cho trẻ (AGENTS.md mục 6, đặc tả mục 15)
+export const GLOBAL_FORBIDDEN_LABELS = ['lười', 'dốt', 'ngốc', 'đần', 'chậm hiểu', 'kém thông minh', 'hậu đậu'];
 
 export function evaluateResponse(scenario, response) {
+  if (typeof response !== 'string') {
+    return {
+      id: scenario.id,
+      category: scenario.category,
+      response,
+      passed: false,
+      checks: [{ id: 'valid_response', description: 'The tutor must return a response string.', passed: false, reason: `Got ${typeof response}` }],
+    };
+  }
   const normalized = normalize(response);
   const checks = scenario.criteria.map((criterion) => {
-    const missing = criterion.mustContainAny?.length && !includesAny(normalized, criterion.mustContainAny);
-    const forbidden = criterion.mustNotContainAny?.length && includesAny(normalized, criterion.mustNotContainAny);
+    const missing = criterion.mustContainAny?.length > 0 && findPhrases(normalized, criterion.mustContainAny).length === 0;
+    const found = criterion.mustNotContainAny?.length ? findPhrases(normalized, criterion.mustNotContainAny) : [];
+    const reasons = [
+      ...(missing ? [`Expected one of: ${criterion.mustContainAny.join(', ')}`] : []),
+      ...(found.length ? [`Found forbidden phrase: ${found.join(', ')}`] : []),
+    ];
     return {
       id: criterion.id,
       description: criterion.description,
-      passed: !missing && !forbidden,
-      ...(missing ? { reason: `Expected one of: ${criterion.mustContainAny.join(', ')}` } : {}),
-      ...(forbidden ? { reason: `Found forbidden phrase: ${criterion.mustNotContainAny.join(', ')}` } : {}),
+      passed: reasons.length === 0,
+      ...(reasons.length ? { reason: reasons.join('; ') } : {}),
     };
   });
 
+  const labels = findPhrases(normalized, GLOBAL_FORBIDDEN_LABELS);
+  checks.push({
+    id: 'no_labels',
+    description: 'Do not label the learner (lazy, slow, stupid...).',
+    passed: labels.length === 0,
+    ...(labels.length ? { reason: `Found label: ${labels.join(', ')}` } : {}),
+  });
+
   for (const number of scenario.forbiddenNumbers ?? []) {
-    const digitsLeaked = new RegExp(`(^|\\D)${number}(?=\\D|$)`).test(String(response));
-    const wordsLeaked = numberWords(number).some((words) => normalized.includes(normalize(words)));
-    const leaked = digitsLeaked || wordsLeaked;
-    checks.push({ id: 'no_answer_leak', description: `Do not reveal forbidden answer ${number}, in digits or words.`, passed: !leaked, ...(!leaked ? {} : { reason: `Revealed forbidden answer ${number}${wordsLeaked ? ' in words' : ''}` }) });
+    const digitsLeaked = new RegExp(`(^|\\D)${number}(?=\\D|$)`).test(response);
+    const wordsLeaked = findPhrases(normalized, numberWords(number)).length > 0;
+    const placeValueLeaked = placeValuePattern(number)?.test(normalized) ?? false;
+    const leaked = digitsLeaked || wordsLeaked || placeValueLeaked;
+    const how = placeValueLeaked ? ' as tens and units' : wordsLeaked ? ' in words' : '';
+    checks.push({ id: 'no_answer_leak', description: `Do not reveal forbidden answer ${number}, in digits, words, or tens and units.`, passed: !leaked, ...(!leaked ? {} : { reason: `Revealed forbidden answer ${number}${how}` }) });
   }
 
   return { id: scenario.id, category: scenario.category, response, passed: checks.every((check) => check.passed), checks };
 }
 
-function numberWords(value) {
+const ONES = ['không', 'một', 'hai', 'ba', 'bốn', 'năm', 'sáu', 'bảy', 'tám', 'chín'];
+
+// Cách đọc số 0–100, gồm cả cách nói tắt thường gặp ("bốn hai", "ba tư", "hai lăm")
+export function numberWords(value) {
   const number = Number(value);
-  if (!Number.isInteger(number) || number < 0 || number > 99) return [];
-  const ones = ['không', 'một', 'hai', 'ba', 'bốn', 'năm', 'sáu', 'bảy', 'tám', 'chín'];
-  if (number < 10) return [ones[number]];
+  if (!Number.isInteger(number) || number < 0 || number > 100) return [];
+  if (number === 100) return ['một trăm', 'trăm'];
+  if (number < 10) return [ONES[number]];
   if (number === 10) return ['mười'];
-  if (number < 20) return [`mười ${number === 15 ? 'lăm' : ones[number - 10]}`];
-  const tens = Math.floor(number / 10);
   const unit = number % 10;
-  if (!unit) return [`${ones[tens]} mươi`];
-  const variants = unit === 1 ? ['mốt', 'một'] : unit === 4 ? ['bốn', 'tư'] : unit === 5 ? ['lăm', 'năm'] : [ones[unit]];
-  return variants.map((word) => `${ones[tens]} mươi ${word}`);
+  const unitWords = unit === 1 ? ['mốt', 'một'] : unit === 4 ? ['bốn', 'tư'] : unit === 5 ? ['lăm', 'năm'] : [ONES[unit]];
+  if (number < 20) {
+    const teenUnit = unit === 5 ? ['lăm'] : unit === 4 ? ['bốn', 'tư'] : [ONES[unit]];
+    return teenUnit.map((word) => `mười ${word}`);
+  }
+  const tens = ONES[Math.floor(number / 10)];
+  if (!unit) return [`${tens} mươi`];
+  return unitWords.flatMap((word) => [`${tens} mươi ${word}`, `${tens} ${word}`]);
 }
 
-export async function runEvaluations(scenarios, respond = null) {
+// "4 chục 2 đơn vị", "bốn chục và hai đơn vị"
+function placeValuePattern(value) {
+  const number = Number(value);
+  if (!Number.isInteger(number) || number < 10 || number > 99) return null;
+  const tens = Math.floor(number / 10);
+  const unit = number % 10;
+  const either = (digit) => `(?:${digit}|${ONES[digit]})`;
+  const unitPart = unit ? `(?:\\s*,)?\\s+(?:và\\s+)?${either(unit)}\\s+đơn\\s+vị` : '';
+  return new RegExp(`(?<![\\p{L}\\p{N}])${either(tens)}\\s+chục${unitPart}(?![\\p{L}\\p{N}])`, 'u');
+}
+
+const DEFAULT_TIMEOUT_MS = 30_000;
+
+async function callAdapter(respond, input, timeoutMs) {
+  let timer;
+  const timeout = new Promise((_, reject) => {
+    timer = setTimeout(() => reject(new Error(`timed out after ${timeoutMs} ms`)), timeoutMs);
+  });
+  try {
+    return { response: await Promise.race([respond(input), timeout]) };
+  } catch (error) {
+    return { error: error?.message ?? String(error) };
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+export async function runEvaluations(scenarios, respond = null, { timeoutMs = DEFAULT_TIMEOUT_MS } = {}) {
   const results = [];
   for (const scenario of scenarios) {
     const publicInput = { id: scenario.id, category: scenario.category, context: scenario.context, learnerTurn: scenario.learnerTurn };
-    const response = respond ? await respond(publicInput) : scenario.simulatorResponse;
-    results.push(evaluateResponse(scenario, response));
+    if (!respond) {
+      results.push(evaluateResponse(scenario, scenario.simulatorResponse));
+      continue;
+    }
+    // Một tình huống lỗi hoặc quá giờ chỉ làm trượt tình huống đó, không dừng cả lần chạy
+    const { response, error } = await callAdapter(respond, publicInput, timeoutMs);
+    results.push(error === undefined
+      ? evaluateResponse(scenario, response)
+      : { id: scenario.id, category: scenario.category, response: null, passed: false, checks: [{ id: 'adapter_error', description: 'The tutor adapter must answer without throwing.', passed: false, reason: error }] });
   }
   const byCategory = {};
   for (const result of results) {
