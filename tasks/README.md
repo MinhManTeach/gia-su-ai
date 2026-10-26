@@ -10,8 +10,8 @@ Thứ tự: T-00 → (T-01, T-02, T-03 song song) → (T-04, T-05) → (T-06, T-
 | [T-03](T-03-hoc-lieu-mau.md) | Codex | Học liệu mẫu 1 bài + kiểm tra đáp án | Đạt (đã merge, PR #7) |
 | [T-04](T-04-danh-gia-phan-hoi.md) | Codex | Bộ đánh giá phản hồi của gia sư | Đạt (đã merge, PR #8) |
 | [T-05](T-05-chi-phi-buoi-hoc.md) | Muse | Công cụ ước tính chi phí và độ trễ | Đạt (đã merge, PR #9) |
-| [T-06](T-06-giong-noi.md) | Codex | Giọng nói hai chiều cho bài Toán mẫu | Sẵn sàng giao |
+| [T-06](T-06-giong-noi.md) | Codex | Giọng nói hai chiều cho bài Toán mẫu | Đang làm · issue #13 |
 | T-07 | Claude | Báo cáo đi tiếp hay đổi hướng | Chờ T-01…T-06 |
-| [T-08](T-08-thiet-ke-giao-dien.md) | Codex | Thiết kế lại giao diện bản thử cho trẻ | Sẵn sàng giao |
+| [T-08](T-08-thiet-ke-giao-dien.md) | Codex | Thiết kế lại giao diện bản thử cho trẻ | Đang làm · issue #12 |
 
 Trạng thái: Chưa bắt đầu · Sẵn sàng giao · Đang làm · Đang review · Cần sửa · Đạt (đã merge).
