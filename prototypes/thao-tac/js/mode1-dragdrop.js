@@ -68,7 +68,7 @@ class Mode1DragDrop {
         <div class="problem-header">
           <div class="problem-title">
             <span class="badge-math">Cách 1</span>
-            <span class="problem-equation">27 + 15 = ?</span>
+            <h2 class="problem-equation">27 + 15 = ?</h2>
           </div>
           <div class="problem-desc">
             Kéo thả hoặc chạm vào <strong>que chục</strong> và <strong>khối đơn vị</strong> để đưa vào Bảng Tính.
@@ -104,14 +104,14 @@ class Mode1DragDrop {
         <!-- Bảng tính gộp -->
         <div class="workspace-board">
           <div class="board-top-bar">
-            <h3 class="board-title">Bảng Tính Gộp (Kết Quả)</h3>
+            <h3 class="board-title">Bảng của con</h3>
             <div class="board-actions">
               <button type="button" class="btn-action btn-group-tens ${canGroup ? 'glow-pulse' : ''}" 
                       id="btn-group-tens" ${canGroup ? '' : 'disabled'}>
-                ✨ Gộp 10 đơn vị thành 1 chục (${unitsInBoardCount}/10)
+                Gộp 10 đơn vị thành 1 chục (${unitsInBoardCount}/10)
               </button>
               <button type="button" class="btn-action btn-secondary" id="btn-mode1-reset">
-                🔄 Làm lại
+                Làm lại
               </button>
             </div>
           </div>
@@ -143,7 +143,7 @@ class Mode1DragDrop {
               <span>Số đơn vị hiện tại: <strong class="highlight-val">${unitsInBoardCount}</strong> đơn vị</span>
               <span>Tổng cộng: <strong class="highlight-total">${tensInBoardCount * 10 + unitsInBoardCount}</strong></span>
             </div>
-            <div id="mode1-feedback" class="feedback-banner ${this.getFeedbackStatus(tensInBoardCount, unitsInBoardCount)}">
+            <div id="mode1-feedback" aria-live="polite" aria-atomic="true" class="feedback-banner ${this.getFeedbackStatus(tensInBoardCount, unitsInBoardCount)}">
               ${this.getFeedbackMessage(tensInBoardCount, unitsInBoardCount)}
             </div>
           </div>

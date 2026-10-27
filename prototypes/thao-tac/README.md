@@ -1,4 +1,4 @@
-# Bản Thử 3 Kiểu Thao Tác Bài Toán (T-02)
+# Bản thử 3 kiểu thao tác bài toán (T-02, giao diện T-08)
 
 Thuộc dự án **Gia sư AI tại nhà** — Phép cộng có nhớ trong phạm vi 100 ($27 + 15 = 42$).  
 Mô-đun phụ trách: `voice-workspace`.
@@ -35,7 +35,7 @@ Sau đó truy cập: `http://localhost:8080` (hoặc cổng mà terminal hiển 
   - Trẻ có thể kéo thả bằng chuột trên PC hoặc ngón tay trên máy tính bảng (hỗ trợ Pointer Events chuẩn).
   - Có thể chạm/click vào que tính hoặc khối đơn vị để di chuyển nhanh vào bảng tính. Dùng bàn phím thì Tab tới vật phẩm rồi bấm Enter hoặc Space.
   - Trên máy tính bảng xoay ngang, kho đồ vật và bảng tính nằm cạnh nhau. Kéo vật phẩm tới gần mép trên/dưới màn hình thì trang tự cuộn.
-  - Khi hàng đơn vị có $\ge 10$ khối, nút **"✨ Gộp 10 đơn vị thành 1 chục"** sẽ sáng lên. Bấm vào nút này, 10 khối đơn vị sẽ gộp thành 1 que chục mới chuyển sang Cột Chục.
+  - Khi hàng đơn vị có $\ge 10$ khối, nút **"Gộp 10 đơn vị thành 1 chục"** sẽ được bật. Bấm vào nút này, 10 khối đơn vị sẽ gộp thành 1 que chục mới chuyển sang Cột Chục.
   - Kết quả sau khi gộp: 4 que chục và 2 khối đơn vị $\rightarrow 42$.
   - Có nút **🔄 Làm lại** để thực hành lại bất kỳ lúc nào mà không bị phạt hay chấm sai giữa chừng.
 
@@ -43,7 +43,7 @@ Sau đó truy cập: `http://localhost:8080` (hoặc cổng mà terminal hiển 
 - **Mục tiêu sư phạm**: Rèn luyện kỹ năng đặt tính rồi tính theo cột dọc chuẩn sách giáo khoa Toán tiểu học (GDPT 2018).
 - **Giao diện**:
   - Đặt tính dọc số 27 cộng 15.
-  - Có ô tròn **nhớ** ở phía trên hàng chục.
+  - Có ô viền nét đứt **nhớ** ở phía trên hàng chục.
   - Có 2 ô kết quả hàng chục và hàng đơn vị.
 - **Hỗ trợ thiết bị**:
   - Bàn phím số cảm ứng tích hợp (On-screen Keypad): Nút bấm lớn ($> 54\text{px}$), giúp trẻ dùng máy tính bảng thao tác tiện lợi mà không bị bàn phím ảo của hệ điều hành che khuất màn hình.
@@ -66,7 +66,7 @@ Sau đó truy cập: `http://localhost:8080` (hoặc cổng mà terminal hiển 
 ---
 
 ## 3. Khung theo dõi sự kiện (Debug Event Log)
-- Nằm ở cuối trang, tự động ghi nhận **mọi thao tác của học sinh**:
+- Chỉ hiện ở cuối trang khi thêm `?debug=1` vào URL (ví dụ `index.html?debug=1&mode=mode2`). Khi bị ẩn, logger vẫn tự động ghi nhận **mọi thao tác của học sinh**:
   - Loại thao tác: chuyển tab, chạm vật phẩm, bắt đầu kéo, thả hợp lệ, thả ngoài vùng, gộp 10 đơn vị, chọn ô nhập, gõ chữ số, xóa số, chọn đáp án trắc nghiệm, bấm kiểm tra, làm lại...
   - Giá trị chi tiết: vị trí nguồn, vị trí đích, mã vật phẩm, chữ số đã nhập, đáp án đã chọn, chẩn đoán nguyên nhân lỗi...
   - Mỗi lần bấm kiểm tra (Cách 2, 3) có `attemptNo` (lần thử thứ mấy) và `afterFeedback` (đã nhận gợi ý sau một lần sai chưa). Đúng sau gợi ý là có hỗ trợ, không phải tự làm.
@@ -83,3 +83,9 @@ Sau đó truy cập: `http://localhost:8080` (hoặc cổng mà terminal hiển 
 - Google Chrome (Desktop & Mobile/Tablet emulation)
 - Microsoft Edge (Desktop & Tablet emulation)
 - Tương thích tốt trên màn hình máy tính để bàn và màn hình máy tính bảng 10-inch xoay ngang ($1024 \times 768$, $1180 \times 820$, $1280 \times 800$).
+
+## 5. Thiết kế và bằng chứng T-08
+
+- [Hợp đồng thiết kế](THIET-KE.md)
+- [Kết quả kiểm tra, ảnh trước/sau và giới hạn](KIEM-TRA-T-08.md)
+- Bản thử chạy độc lập bằng HTML/CSS/JS; Playwright chỉ dùng ngoài ứng dụng để kiểm tra.

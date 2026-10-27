@@ -1,0 +1,524 @@
+{
+  "browser": "156.0.8078.48",
+  "measurements": [
+    {
+      "width": 768,
+      "height": 820,
+      "mode": 1,
+      "minWidth": 48,
+      "minHeight": 48,
+      "minGap": 8,
+      "overflow": false,
+      "columnsBottom": 706.390625,
+      "materialsBottom": 869.59375,
+      "debug": "none",
+      "feedback": "polite",
+      "headings": [
+        1,
+        2,
+        3
+      ],
+      "focusCount": 21,
+      "motion": false
+    },
+    {
+      "width": 768,
+      "height": 820,
+      "mode": 2,
+      "minWidth": 64,
+      "minHeight": 48,
+      "minGap": 8,
+      "overflow": false,
+      "columnsBottom": 0,
+      "materialsBottom": 0,
+      "debug": "none",
+      "feedback": "polite",
+      "headings": [
+        1,
+        2
+      ],
+      "focusCount": 19,
+      "motion": false
+    },
+    {
+      "width": 768,
+      "height": 820,
+      "mode": 3,
+      "minWidth": 166.703125,
+      "minHeight": 48,
+      "minGap": 8,
+      "overflow": false,
+      "columnsBottom": 0,
+      "materialsBottom": 0,
+      "debug": "none",
+      "feedback": "polite",
+      "headings": [
+        1,
+        2
+      ],
+      "focusCount": 8,
+      "motion": false
+    },
+    {
+      "width": 1024,
+      "height": 768,
+      "mode": 1,
+      "minWidth": 48,
+      "minHeight": 48,
+      "minGap": 8,
+      "overflow": false,
+      "columnsBottom": 678.390625,
+      "materialsBottom": 729.59375,
+      "debug": "none",
+      "feedback": "polite",
+      "headings": [
+        1,
+        2,
+        3
+      ],
+      "focusCount": 21,
+      "motion": false
+    },
+    {
+      "width": 1024,
+      "height": 768,
+      "mode": 2,
+      "minWidth": 64,
+      "minHeight": 48,
+      "minGap": 8,
+      "overflow": false,
+      "columnsBottom": 0,
+      "materialsBottom": 0,
+      "debug": "none",
+      "feedback": "polite",
+      "headings": [
+        1,
+        2
+      ],
+      "focusCount": 19,
+      "motion": false
+    },
+    {
+      "width": 1024,
+      "height": 768,
+      "mode": 3,
+      "minWidth": 166.703125,
+      "minHeight": 48,
+      "minGap": 8,
+      "overflow": false,
+      "columnsBottom": 0,
+      "materialsBottom": 0,
+      "debug": "none",
+      "feedback": "polite",
+      "headings": [
+        1,
+        2
+      ],
+      "focusCount": 8,
+      "motion": false
+    },
+    {
+      "width": 1180,
+      "height": 820,
+      "mode": 1,
+      "minWidth": 48,
+      "minHeight": 48,
+      "minGap": 8,
+      "overflow": false,
+      "columnsBottom": 596.78125,
+      "materialsBottom": 699.984375,
+      "debug": "none",
+      "feedback": "polite",
+      "headings": [
+        1,
+        2,
+        3
+      ],
+      "focusCount": 21,
+      "motion": false
+    },
+    {
+      "width": 1180,
+      "height": 820,
+      "mode": 2,
+      "minWidth": 64,
+      "minHeight": 48,
+      "minGap": 8,
+      "overflow": false,
+      "columnsBottom": 0,
+      "materialsBottom": 0,
+      "debug": "none",
+      "feedback": "polite",
+      "headings": [
+        1,
+        2
+      ],
+      "focusCount": 19,
+      "motion": false
+    },
+    {
+      "width": 1180,
+      "height": 820,
+      "mode": 3,
+      "minWidth": 166.703125,
+      "minHeight": 48,
+      "minGap": 8,
+      "overflow": false,
+      "columnsBottom": 0,
+      "materialsBottom": 0,
+      "debug": "none",
+      "feedback": "polite",
+      "headings": [
+        1,
+        2
+      ],
+      "focusCount": 8,
+      "motion": false
+    },
+    {
+      "width": 1280,
+      "height": 800,
+      "mode": 1,
+      "minWidth": 48,
+      "minHeight": 48,
+      "minGap": 8,
+      "overflow": false,
+      "columnsBottom": 596.78125,
+      "materialsBottom": 647.984375,
+      "debug": "none",
+      "feedback": "polite",
+      "headings": [
+        1,
+        2,
+        3
+      ],
+      "focusCount": 21,
+      "motion": false
+    },
+    {
+      "width": 1280,
+      "height": 800,
+      "mode": 2,
+      "minWidth": 64,
+      "minHeight": 48,
+      "minGap": 8,
+      "overflow": false,
+      "columnsBottom": 0,
+      "materialsBottom": 0,
+      "debug": "none",
+      "feedback": "polite",
+      "headings": [
+        1,
+        2
+      ],
+      "focusCount": 19,
+      "motion": false
+    },
+    {
+      "width": 1280,
+      "height": 800,
+      "mode": 3,
+      "minWidth": 166.703125,
+      "minHeight": 48,
+      "minGap": 8,
+      "overflow": false,
+      "columnsBottom": 0,
+      "materialsBottom": 0,
+      "debug": "none",
+      "feedback": "polite",
+      "headings": [
+        1,
+        2
+      ],
+      "focusCount": 8,
+      "motion": false
+    },
+    {
+      "width": 1440,
+      "height": 900,
+      "mode": 1,
+      "minWidth": 48,
+      "minHeight": 48,
+      "minGap": 8,
+      "overflow": false,
+      "columnsBottom": 596.78125,
+      "materialsBottom": 647.984375,
+      "debug": "none",
+      "feedback": "polite",
+      "headings": [
+        1,
+        2,
+        3
+      ],
+      "focusCount": 21,
+      "motion": false
+    },
+    {
+      "width": 1440,
+      "height": 900,
+      "mode": 2,
+      "minWidth": 64,
+      "minHeight": 48,
+      "minGap": 8,
+      "overflow": false,
+      "columnsBottom": 0,
+      "materialsBottom": 0,
+      "debug": "none",
+      "feedback": "polite",
+      "headings": [
+        1,
+        2
+      ],
+      "focusCount": 19,
+      "motion": false
+    },
+    {
+      "width": 1440,
+      "height": 900,
+      "mode": 3,
+      "minWidth": 166.703125,
+      "minHeight": 48,
+      "minGap": 8,
+      "overflow": false,
+      "columnsBottom": 0,
+      "materialsBottom": 0,
+      "debug": "none",
+      "feedback": "polite",
+      "headings": [
+        1,
+        2
+      ],
+      "focusCount": 8,
+      "motion": false
+    }
+  ],
+  "events": [
+    {
+      "mode": "chung",
+      "type": "CHUYEN_CHE_DO",
+      "detail": {
+        "selectedMode": "mode1",
+        "tabTitle": "🟡 Cách 1: Que tính & Khối đơn vị"
+      }
+    },
+    {
+      "mode": "chung",
+      "type": "KHOI_DONG_UNG_DUNG",
+      "detail": {
+        "initialMode": "mode1"
+      }
+    },
+    {
+      "mode": "keo-tha",
+      "type": "CHAM_VAT_PHAM",
+      "detail": {
+        "itemId": "unit-27-1",
+        "itemType": "unit",
+        "currentLocation": "num27"
+      }
+    },
+    {
+      "mode": "keo-tha",
+      "type": "BAT_DAU_KEO",
+      "detail": {
+        "itemId": "unit-27-1",
+        "fromLocation": "num27"
+      }
+    },
+    {
+      "mode": "keo-tha",
+      "type": "THA_NHAM_COT",
+      "detail": {
+        "itemId": "unit-27-1",
+        "itemType": "unit",
+        "attemptedZone": "board-tens",
+        "returnedTo": "num27",
+        "note": "Trẻ kéo nhầm cột; đã trả về vị trí cũ để tự làm lại"
+      }
+    },
+    {
+      "mode": "keo-tha",
+      "type": "CHAM_VAT_PHAM",
+      "detail": {
+        "itemId": "unit-27-1",
+        "itemType": "unit",
+        "currentLocation": "num27"
+      }
+    },
+    {
+      "mode": "keo-tha",
+      "type": "BAT_DAU_KEO",
+      "detail": {
+        "itemId": "unit-27-1",
+        "fromLocation": "num27"
+      }
+    },
+    {
+      "mode": "keo-tha",
+      "type": "THA_HOP_LE",
+      "detail": {
+        "itemId": "unit-27-1",
+        "itemType": "unit",
+        "from": "num27",
+        "to": "board-units"
+      }
+    },
+    {
+      "mode": "keo-tha",
+      "type": "CHAM_CHUYEN_VI_TRI",
+      "detail": {
+        "itemId": "ten-27-1",
+        "itemType": "ten",
+        "from": "num27",
+        "to": "board-tens"
+      }
+    },
+    {
+      "mode": "keo-tha",
+      "type": "CHUYEN_NHANH_CO_TRO_GIUP",
+      "detail": {
+        "source": "num27",
+        "movedItemsCount": 7,
+        "hasAssistance": true,
+        "note": "Dùng nút trợ giúp chuyển nhanh cả số vào bảng (phân biệt với tự kéo)"
+      }
+    },
+    {
+      "mode": "keo-tha",
+      "type": "CHUYEN_NHANH_CO_TRO_GIUP",
+      "detail": {
+        "source": "num15",
+        "movedItemsCount": 6,
+        "hasAssistance": true,
+        "note": "Dùng nút trợ giúp chuyển nhanh cả số vào bảng (phân biệt với tự kéo)"
+      }
+    },
+    {
+      "mode": "keo-tha",
+      "type": "GOP_10_DON_VI_THANH_1_CHUC",
+      "detail": {
+        "removedUnitsCount": 10,
+        "newTenId": "<generated-id>",
+        "remainingUnits": 2,
+        "currentTens": 4
+      }
+    },
+    {
+      "mode": "chung",
+      "type": "CHUYEN_CHE_DO",
+      "detail": {
+        "selectedMode": "mode2",
+        "tabTitle": "📝 Cách 2: Đặt tính có ô \"nhớ\""
+      }
+    },
+    {
+      "mode": "dat-tinh",
+      "type": "NHAP_CHU_SO",
+      "detail": {
+        "field": "units",
+        "prevValue": "",
+        "newValue": "2"
+      }
+    },
+    {
+      "mode": "dat-tinh",
+      "type": "NHAP_CHU_SO",
+      "detail": {
+        "field": "remember",
+        "prevValue": "",
+        "newValue": "1"
+      }
+    },
+    {
+      "mode": "dat-tinh",
+      "type": "NHAP_CHU_SO",
+      "detail": {
+        "field": "tens",
+        "prevValue": "",
+        "newValue": "3"
+      }
+    },
+    {
+      "mode": "dat-tinh",
+      "type": "KIEM_TRA_LOI_QUEN_NHO",
+      "detail": {
+        "units": "2",
+        "tens": "3",
+        "remember": "1",
+        "attemptNo": 1,
+        "afterFeedback": false,
+        "resultCorrect": false
+      }
+    },
+    {
+      "mode": "dat-tinh",
+      "type": "NHAP_CHU_SO",
+      "detail": {
+        "field": "tens",
+        "prevValue": "3",
+        "newValue": "4"
+      }
+    },
+    {
+      "mode": "dat-tinh",
+      "type": "KIEM_TRA_DUNG_TOAN_DIEN",
+      "detail": {
+        "units": "2",
+        "tens": "4",
+        "remember": "1",
+        "attemptNo": 2,
+        "afterFeedback": true,
+        "resultCorrect": true,
+        "carryCorrect": true
+      }
+    },
+    {
+      "mode": "chung",
+      "type": "CHUYEN_CHE_DO",
+      "detail": {
+        "selectedMode": "mode3",
+        "tabTitle": "🎯 Cách 3: Chọn 1 trong 4 đáp án"
+      }
+    },
+    {
+      "mode": "trac-nghiem",
+      "type": "CHON_DAP_AN",
+      "detail": {
+        "optionId": "A",
+        "value": 32
+      }
+    },
+    {
+      "mode": "trac-nghiem",
+      "type": "KIEM_TRA_DAP_AN_SAI",
+      "detail": {
+        "chosenId": "A",
+        "chosenValue": 32,
+        "correctValue": 42,
+        "attemptNo": 1,
+        "afterFeedback": false,
+        "misconception": "quên_nhớ_hàng_chục"
+      }
+    },
+    {
+      "mode": "trac-nghiem",
+      "type": "CHON_DAP_AN",
+      "detail": {
+        "optionId": "B",
+        "value": 42
+      }
+    },
+    {
+      "mode": "trac-nghiem",
+      "type": "KIEM_TRA_DAP_AN_DUNG",
+      "detail": {
+        "chosenId": "B",
+        "chosenValue": 42,
+        "correctValue": 42,
+        "attemptNo": 2,
+        "afterFeedback": true
+      }
+    }
+  ],
+  "diagnostics": []
+}

@@ -37,7 +37,7 @@ class Mode2Column {
         <div class="problem-header">
           <div class="problem-title">
             <span class="badge-math">Cách 2</span>
-            <span class="problem-equation">Đặt tính rồi tính: 27 + 15</span>
+            <h2 class="problem-equation"><span class="equation-label">Đặt tính rồi tính:</span> 27 + 15</h2>
           </div>
           <div class="problem-desc">
             Thực hiện phép tính từ phải sang trái (tính hàng <strong>đơn vị</strong> trước, rồi đến hàng <strong>chục</strong>).
@@ -125,23 +125,23 @@ class Mode2Column {
               <button type="button" class="keypad-btn" data-key="7">7</button>
               <button type="button" class="keypad-btn" data-key="8">8</button>
               <button type="button" class="keypad-btn" data-key="9">9</button>
-              <button type="button" class="keypad-btn keypad-func" data-key="clear" title="Xóa số trong ô này">⌫</button>
+              <button type="button" class="keypad-btn keypad-func" data-key="clear" aria-label="Xóa số trong ô này" title="Xóa số trong ô này">⌫</button>
               <button type="button" class="keypad-btn" data-key="0">0</button>
             </div>
             
             <div class="keypad-controls">
               <button type="button" class="btn-action btn-primary btn-check-col" id="btn-mode2-check">
-                ✅ Kiểm tra kết quả
+                Kiểm tra kết quả
               </button>
               <button type="button" class="btn-action btn-secondary" id="btn-mode2-reset">
-                🔄 Làm lại
+                Làm lại
               </button>
             </div>
           </div>
         </div>
 
         <!-- Khung phản hồi sau khi bấm kiểm tra -->
-        <div id="mode2-feedback" class="feedback-banner ${this.state.feedbackType ? 'feedback-' + this.state.feedbackType : ''}">
+        <div id="mode2-feedback" aria-live="polite" aria-atomic="true" class="feedback-banner ${this.state.feedbackType ? 'feedback-' + this.state.feedbackType : ''}">
           ${this.state.feedbackMessage || 'Nhấn vào ô cần điền rồi bấm số trên bàn phím. Khi tính xong hãy bấm "Kiểm tra kết quả".'}
         </div>
       </div>
