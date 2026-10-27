@@ -45,7 +45,7 @@ class Mode3Choice {
         <div class="problem-header">
           <div class="problem-title">
             <span class="badge-math">Cách 3</span>
-            <span class="problem-equation">Chọn đáp án đúng</span>
+            <h2 class="problem-equation">Chọn đáp án đúng</h2>
           </div>
           <div class="problem-desc">
             Đọc kĩ đề bài bên dưới, chạm hoặc nhấp chuột vào một đáp án con cho là đúng nhất.
@@ -77,15 +77,15 @@ class Mode3Choice {
           <!-- Các nút thao tác -->
           <div class="choice-actions">
             <button type="button" class="btn-action btn-primary btn-lg" id="btn-mode3-check" ${this.state.selectedOptionId ? '' : 'disabled'}>
-              ✅ Kiểm tra đáp án
+              Kiểm tra đáp án
             </button>
             <button type="button" class="btn-action btn-secondary" id="btn-mode3-reset">
-              🔄 Chọn lại từ đầu
+              Chọn lại từ đầu
             </button>
           </div>
 
           <!-- Thông báo phản hồi sau khi kiểm tra -->
-          <div id="mode3-feedback" class="feedback-banner ${this.state.feedbackType ? 'feedback-' + this.state.feedbackType : ''}">
+          <div id="mode3-feedback" aria-live="polite" aria-atomic="true" class="feedback-banner ${this.state.feedbackType ? 'feedback-' + this.state.feedbackType : ''}">
             ${this.state.feedbackMessage || 'Hãy chọn một trong 4 đáp án ở trên rồi bấm "Kiểm tra đáp án".'}
           </div>
         </div>

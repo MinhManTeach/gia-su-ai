@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0, user-scalable=yes">
-  <title>Bản Thử 3 Kiểu Thao Tác Bài Toán — Gia Sư AI (T-02)</title>
+  <title>Cùng học phép cộng — Gia Sư AI</title>
   <meta name="description" content="Bản thử nghiệm 3 kiểu thao tác phép cộng có nhớ dành cho học sinh tiểu học: Kéo thả que chục và khối đơn vị, Đặt tính theo cột có ô nhớ, và Trắc nghiệm 4 đáp án.">
   <link rel="stylesheet" href="css/style.css">
 </head>
@@ -12,26 +12,25 @@
   <!-- Header ứng dụng -->
   <header class="app-header">
     <div class="app-branding">
-      <span class="app-logo">📐</span>
       <div class="app-title-group">
-        <h1>Gia Sư AI — Không Gian Thao Tác Toán Học</h1>
-        <p>Phép cộng có nhớ trong phạm vi 100 (Toán lớp 2 — GDPT 2018)</p>
+        <h1>Cùng học phép cộng</h1>
+        <p>Con chọn một cách để làm nhé.</p>
       </div>
     </div>
-    <div class="target-badge">
-      Bản thử nghiệm T-02 · Mô-đun voice-workspace
+    <div class="lesson-label">
+      Toán lớp 2 · Cộng có nhớ
     </div>
   </header>
 
   <!-- 3 Thẻ Tabs Chuyển Kiểu Thao Tác -->
   <nav class="tab-navigation" role="tablist" aria-label="Các kiểu thao tác bài toán">
-    <button type="button" class="nav-tab-btn tab-active" data-target="mode1" role="tab" aria-selected="true" id="tab-btn-1">
+    <button type="button" class="nav-tab-btn tab-active" data-target="mode1" role="tab" aria-selected="true" id="tab-btn-1" aria-controls="tab-content-mode1">
       <span>🟡 Cách 1: Que tính & Khối đơn vị</span>
     </button>
-    <button type="button" class="nav-tab-btn" data-target="mode2" role="tab" aria-selected="false" id="tab-btn-2">
+    <button type="button" class="nav-tab-btn" data-target="mode2" role="tab" aria-selected="false" id="tab-btn-2" aria-controls="tab-content-mode2">
       <span>📝 Cách 2: Đặt tính có ô "nhớ"</span>
     </button>
-    <button type="button" class="nav-tab-btn" data-target="mode3" role="tab" aria-selected="false" id="tab-btn-3">
+    <button type="button" class="nav-tab-btn" data-target="mode3" role="tab" aria-selected="false" id="tab-btn-3" aria-controls="tab-content-mode3">
       <span>🎯 Cách 3: Chọn 1 trong 4 đáp án</span>
     </button>
   </nav>
@@ -58,7 +57,7 @@
   <aside class="debug-section" aria-label="Bảng theo dõi sự kiện tương tác">
     <div class="debug-header">
       <div class="debug-title-wrap">
-        <h4>⚡ Khung Theo Dõi Sự Kiện (Debug Event Log)</h4>
+        <h2>Khung theo dõi sự kiện</h2>
         <span class="counter-badge" id="debug-counter">0 sự kiện</span>
       </div>
       <div class="debug-actions">
@@ -92,6 +91,11 @@
       </div>
     </div>
   </aside>
+
+  <!-- Chỉ đổi phần hiển thị debug; logger luôn được khởi tạo như cũ. -->
+  <script>
+    document.documentElement.dataset.debug = new URLSearchParams(location.search).get('debug') === '1' ? 'true' : 'false';
+  </script>
 
   <!-- Scripts -->
   <script src="js/logger.js"></script>
